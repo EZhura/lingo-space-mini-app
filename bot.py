@@ -2,14 +2,10 @@ import logging
 import os
 
 import httpx
-
+from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template, request
-from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import (
-    Application,
-    CommandHandler,
-    ContextTypes,
-)
+
+load_dotenv()
 
 logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
@@ -21,9 +17,17 @@ BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
 WEBAPP_URL = os.getenv("WEBAPP_URL", "").strip()
 WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET", "").strip()
 
-TELEGRAM_API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
+TELEGRAM_API_URL = (
+    f"https://api.telegram.org/bot{BOT_TOKEN}"
+    if BOT_TOKEN
+    else ""
+)
+
+app = Flask(__name__)
+
 
 def build_webapp_markup() -> dict | None:
+    """Возвращает inline-кнопку для запуска Telegram Mini App."""
     if not WEBAPP_URL:
         return None
 
@@ -44,11 +48,11 @@ def send_telegram_message(
     text: str,
     reply_markup: dict | None = None,
 ) -> None:
-    if not BOT_TOKEN:
-        logger.error("Cannot send message: TELEGRAM_BOT_TOKEN is missing.")
-        return
+    """Отправляет сообщение через Telegram Bot API."""
+    if not BOT_TOKEN or not TELEGRAM_API_URL:
+        raise RuntimeError("TELEGRAM_BOT_TOKEN is not configured.")
 
-    payload = {
+    payload: dict = {
         "chat_id": chat_id,
         "text": text,
     }
@@ -63,108 +67,6 @@ def send_telegram_message(
     )
     response.raise_for_status()
 
-app = Flask(__name__)
-
-telegram_app: Application | None = None
-telegram_bot: Bot | None = None
-
-
-def get_webapp_keyboard() -> InlineKeyboardMarkup | None:
-    if not WEBAPP_URL:
-        return None
-
-    return InlineKeyboardMarkup(
-        [[InlineKeyboardButton("Открыть Lingo Space", web_app={"url": WEBAPP_URL})]]
-    )
-
-
-async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    message = (
-        "Добро пожаловать в Lingo Space 👋\n\n"
-        "Здесь можно подобрать курс английского, испанского или итальянского, "
-        "посмотреть расписание и записаться на бесплатный пробный урок."
-    )
-    await update.effective_message.reply_text(
-        message,
-        reply_markup=get_webapp_keyboard(),
-    )
-
-
-async def courses_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.effective_message.reply_text(
-        "Откройте Mini App, чтобы посмотреть все курсы.",
-        reply_markup=get_webapp_keyboard(),
-    )
-
-
-async def findcourse_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.effective_message.reply_text(
-        "Ответьте на несколько вопросов в Mini App — мы предложим подходящий курс.",
-        reply_markup=get_webapp_keyboard(),
-    )
-
-
-async def schedule_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.effective_message.reply_text(
-        "Ближайшие группы и расписание доступны в Mini App.",
-        reply_markup=get_webapp_keyboard(),
-    )
-
-
-async def teachers_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.effective_message.reply_text(
-        "Познакомьтесь с преподавателями Lingo Space в Mini App.",
-        reply_markup=get_webapp_keyboard(),
-    )
-
-
-async def trial_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.effective_message.reply_text(
-        "Запишитесь на бесплатный пробный урок через Mini App.",
-        reply_markup=get_webapp_keyboard(),
-    )
-
-
-async def contacts_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.effective_message.reply_text(
-        "Контакты и адрес школы доступны в Mini App.",
-        reply_markup=get_webapp_keyboard(),
-    )
-
-
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.effective_message.reply_text(
-        "Используйте кнопку «Открыть Lingo Space» или команды:\n"
-        "/courses — курсы\n"
-        "/findcourse — подбор курса\n"
-        "/schedule — расписание\n"
-        "/teachers — преподаватели\n"
-        "/trial — пробный урок\n"
-        "/contacts — контакты"
-    )
-
-
-def build_telegram_application() -> Application | None:
-    if not BOT_TOKEN:
-        logger.warning("TELEGRAM_BOT_TOKEN is not set. Bot webhook is disabled.")
-        return None
-
-    application = Application.builder().token(BOT_TOKEN).build()
-    application.add_handler(CommandHandler("start", start_command))
-    application.add_handler(CommandHandler("courses", courses_command))
-    application.add_handler(CommandHandler("findcourse", findcourse_command))
-    application.add_handler(CommandHandler("schedule", schedule_command))
-    application.add_handler(CommandHandler("teachers", teachers_command))
-    application.add_handler(CommandHandler("trial", trial_command))
-    application.add_handler(CommandHandler("contacts", contacts_command))
-    application.add_handler(CommandHandler("help", help_command))
-    return application
-
-
-telegram_app = build_telegram_application()
-if BOT_TOKEN:
-    telegram_bot = Bot(token=BOT_TOKEN)
-
 
 @app.get("/")
 def index():
@@ -178,12 +80,14 @@ def health():
             "status": "ok",
             "bot_configured": bool(BOT_TOKEN),
             "webapp_url_configured": bool(WEBAPP_URL),
+            "webhook_secret_configured": bool(WEBHOOK_SECRET),
         }
     )
 
 
 @app.post("/webhook")
 def telegram_webhook():
+    """Принимает обновления Telegram и отвечает на команды."""
     if not BOT_TOKEN:
         return jsonify(
             {"ok": False, "error": "Bot is not configured"}
@@ -270,7 +174,7 @@ def telegram_webhook():
             text=response_text,
             reply_markup=markup,
         )
-    except httpx.HTTPError:
+    except (httpx.HTTPError, RuntimeError):
         logger.exception("Failed to send Telegram message.")
         return jsonify(
             {"ok": False, "error": "Telegram API error"}
@@ -281,6 +185,7 @@ def telegram_webhook():
 
 @app.post("/api/trial")
 def create_trial_request():
+    """Принимает заявку на пробный урок из Mini App."""
     payload = request.get_json(silent=True) or {}
 
     name = str(payload.get("name", "")).strip()
