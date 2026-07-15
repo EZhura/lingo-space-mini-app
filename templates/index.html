@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="ru">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,11 +9,15 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
+
 <body>
   <main class="app-shell">
     <header class="topbar">
@@ -47,11 +52,11 @@
         </button>
       </div>
 
-      <div class="hero-visual" aria-label="Изображение языковой школы">
-        <div class="hero-placeholder">
-          <span>Добавьте сюда</span>
-          <strong>hero_main.jpg</strong>
-        </div>
+      <div class="hero-visual">
+        <img class="hero-image"
+          src="{{ url_for('static', filename='images/hero_main.jpg') }}"
+          alt="Студенты Lingo Space общаются за круглым столом">
+        <div class="hero-overlay"></div>
         <div class="speech-card">«Хочу говорить без страха»</div>
       </div>
 
@@ -115,4 +120,5 @@
 
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
+
 </html>
