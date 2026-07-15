@@ -1,7 +1,5 @@
 <!doctype html>
 <html lang="ru">
-import httpx
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -10,15 +8,11 @@ import httpx
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet"
-    href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-
 <body>
   <main class="app-shell">
     <header class="topbar">
@@ -47,19 +41,29 @@ import httpx
       </p>
 
       <div class="hero-actions">
-        <button class="button button-primary" type="button" data-scroll-to="matching">
+        <button
+          class="button button-primary"
+          type="button"
+          data-scroll-to="matching"
+        >
           Подобрать курс
         </button>
 
-        <button class="button button-secondary" type="button">
-          Пройти тест уровня
+        <button
+          class="button button-secondary"
+          type="button"
+          data-scroll-to="courses"
+        >
+          Смотреть программы
         </button>
       </div>
 
       <div class="hero-visual">
-        <img class="hero-image"
+        <img
+          class="hero-image"
           src="{{ url_for('static', filename='images/hero_main.jpg') }}"
-          alt="Студенты Lingo Space общаются за круглым столом">
+          alt="Студенты Lingo Space общаются за круглым столом"
+        >
 
         <div class="hero-overlay"></div>
 
@@ -73,30 +77,149 @@ import httpx
       </p>
     </section>
 
-    <section class="section" id="languages">
+    <section class="section courses-section" id="courses">
       <div class="section-heading">
-        <span class="eyebrow">Три языка</span>
-        <h2>Какой язык поможет вам сделать следующий шаг?</h2>
+        <span class="eyebrow">Программы Lingo Space</span>
+        <h2>Выберите язык и цель</h2>
+        <p>
+          Небольшие группы, живая практика и программа,
+          которую можно встроить в обычную жизнь.
+        </p>
       </div>
 
-      <div class="language-grid">
-        <article class="language-card lavender-card">
-          <span class="language-code">EN</span>
-          <h3>English</h3>
-          <p>Для работы, учёбы и международного общения.</p>
+      <div class="course-filters" role="group" aria-label="Фильтр курсов по языку">
+        <button class="filter-button active" type="button" data-filter="all">
+          Все
+        </button>
+        <button class="filter-button" type="button" data-filter="english">
+          English
+        </button>
+        <button class="filter-button" type="button" data-filter="spanish">
+          Español
+        </button>
+        <button class="filter-button" type="button" data-filter="italian">
+          Italiano
+        </button>
+      </div>
+
+      <div class="course-list">
+        <article class="course-card" data-language="english">
+          <div class="course-card-top">
+            <span class="course-language language-english">EN</span>
+            <span class="course-format">Онлайн</span>
+          </div>
+
+          <div class="course-card-content">
+            <p class="course-kicker">Разговорная практика</p>
+            <h3>English Conversation</h3>
+            <p class="course-description">
+              Для тех, кто понимает английский, но теряется,
+              когда нужно говорить.
+            </p>
+
+            <div class="course-meta">
+              <span>A2–B2</span>
+              <span>2 раза в неделю</span>
+              <span>До 6 человек</span>
+            </div>
+
+            <button class="course-action" type="button" data-course="English Conversation">
+              Подобрать этот курс
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
         </article>
 
-        <article class="language-card peach-card">
-          <span class="language-code">ES</span>
-          <h3>Español</h3>
-          <p>Для жизни, адаптации и работы в Испании.</p>
+        <article class="course-card" data-language="spanish">
+          <div class="course-card-top">
+            <span class="course-language language-spanish">ES</span>
+            <span class="course-format">Валенсия + онлайн</span>
+          </div>
+
+          <div class="course-card-content">
+            <p class="course-kicker">Жизнь в Испании</p>
+            <h3>Español para la vida</h3>
+            <p class="course-description">
+              Испанский для бытовых ситуаций, общения,
+              документов и уверенной адаптации.
+            </p>
+
+            <div class="course-meta">
+              <span>A1–B1</span>
+              <span>2 раза в неделю</span>
+              <span>До 8 человек</span>
+            </div>
+
+            <button class="course-action" type="button" data-course="Español para la vida">
+              Подобрать этот курс
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
         </article>
 
-        <article class="language-card cream-card">
-          <span class="language-code">IT</span>
-          <h3>Italiano</h3>
-          <p>Для путешествий, культуры и живого общения.</p>
+        <article class="course-card" data-language="italian">
+          <div class="course-card-top">
+            <span class="course-language language-italian">IT</span>
+            <span class="course-format">Онлайн</span>
+          </div>
+
+          <div class="course-card-content">
+            <p class="course-kicker">Старт с нуля</p>
+            <h3>Italiano da zero</h3>
+            <p class="course-description">
+              Мягкий и понятный старт для путешествий,
+              культуры и первых живых диалогов.
+            </p>
+
+            <div class="course-meta">
+              <span>A0–A2</span>
+              <span>2 раза в неделю</span>
+              <span>До 6 человек</span>
+            </div>
+
+            <button class="course-action" type="button" data-course="Italiano da zero">
+              Подобрать этот курс
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
         </article>
+
+        <article class="course-card" data-language="english">
+          <div class="course-card-top">
+            <span class="course-language language-english">EN</span>
+            <span class="course-format">Онлайн</span>
+          </div>
+
+          <div class="course-card-content">
+            <p class="course-kicker">Работа и карьера</p>
+            <h3>Business English</h3>
+            <p class="course-description">
+              Переговоры, встречи, презентации и переписка
+              без шаблонных учебных диалогов.
+            </p>
+
+            <div class="course-meta">
+              <span>B1–C1</span>
+              <span>1–2 раза в неделю</span>
+              <span>До 6 человек</span>
+            </div>
+
+            <button class="course-action" type="button" data-course="Business English">
+              Подобрать этот курс
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <div class="course-note">
+        <div>
+          <span class="course-note-label">Не уверены в выборе?</span>
+          <strong>Подберём программу за 2 минуты</strong>
+        </div>
+        <button class="button button-primary compact-button" type="button" data-scroll-to="matching">
+          Начать подбор
+        </button>
       </div>
     </section>
 
@@ -104,12 +227,19 @@ import httpx
       <div class="section-heading">
         <span class="eyebrow">Персональный подбор</span>
         <h2>Начнём с комфортного шага</h2>
-        <p>Сейчас здесь будет интерактивный подбор курса из шести вопросов.</p>
+        <p>
+          Ответьте на несколько вопросов — мы предложим
+          подходящую программу и формат.
+        </p>
       </div>
 
       <div class="matching-preview">
         <span class="step-label">Шаг 1 из 6</span>
         <h3>Какой язык вы хотите изучать?</h3>
+
+        <div class="selected-course-note" id="selected-course-note" hidden>
+          Вы выбрали: <strong id="selected-course-name"></strong>
+        </div>
 
         <div class="option-list">
           <button type="button" class="option-button">English</button>
@@ -126,7 +256,7 @@ import httpx
       <span>Главная</span>
     </a>
 
-    <a class="nav-item" href="#languages">
+    <a class="nav-item" href="#courses">
       <span class="nav-icon" aria-hidden="true">A</span>
       <span>Курсы</span>
     </a>
@@ -149,5 +279,4 @@ import httpx
 
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
-
 </html>
