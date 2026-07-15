@@ -1,6 +1,8 @@
 import logging
 import os
 
+import httpx
+
 from flask import Flask, jsonify, render_template, request
 from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
@@ -18,6 +20,48 @@ logger = logging.getLogger(__name__)
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
 WEBAPP_URL = os.getenv("WEBAPP_URL", "").strip()
 WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET", "").strip()
+
+TELEGRAM_API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
+
+def build_webapp_markup() -> dict | None:
+    if not WEBAPP_URL:
+        return None
+
+    return {
+        "inline_keyboard": [
+            [
+                {
+                    "text": "Открыть Lingo Space",
+                    "web_app": {"url": WEBAPP_URL},
+                }
+            ]
+        ]
+    }
+
+
+def send_telegram_message(
+    chat_id: int,
+    text: str,
+    reply_markup: dict | None = None,
+) -> None:
+    if not BOT_TOKEN:
+        logger.error("Cannot send message: TELEGRAM_BOT_TOKEN is missing.")
+        return
+
+    payload = {
+        "chat_id": chat_id,
+        "text": text,
+    }
+
+    if reply_markup:
+        payload["reply_markup"] = reply_markup
+
+    response = httpx.post(
+        f"{TELEGRAM_API_URL}/sendMessage",
+        json=payload,
+        timeout=15,
+    )
+    response.raise_for_status()
 
 app = Flask(__name__)
 
@@ -139,24 +183,98 @@ def health():
 
 
 @app.post("/webhook")
-async def telegram_webhook():
-    if telegram_app is None:
-        return jsonify({"ok": False, "error": "Bot is not configured"}), 503
+def telegram_webhook():
+    if not BOT_TOKEN:
+        return jsonify(
+            {"ok": False, "error": "Bot is not configured"}
+        ), 503
 
     if WEBHOOK_SECRET:
         received_secret = request.headers.get(
-            "X-Telegram-Bot-Api-Secret-Token", ""
+            "X-Telegram-Bot-Api-Secret-Token",
+            "",
         )
+
         if received_secret != WEBHOOK_SECRET:
-            return jsonify({"ok": False, "error": "Invalid secret"}), 403
+            logger.warning("Webhook request with invalid secret.")
+            return jsonify(
+                {"ok": False, "error": "Invalid secret"}
+            ), 403
 
     payload = request.get_json(silent=True)
-    if not payload:
-        return jsonify({"ok": False, "error": "Invalid JSON"}), 400
 
-    update = Update.de_json(payload, telegram_app.bot)
-    await telegram_app.initialize()
-    await telegram_app.process_update(update)
+    if not payload:
+        return jsonify(
+            {"ok": False, "error": "Invalid JSON"}
+        ), 400
+
+    message = payload.get("message") or {}
+    chat = message.get("chat") or {}
+    chat_id = chat.get("id")
+    text = str(message.get("text", "")).strip()
+
+    if not chat_id or not text:
+        return jsonify({"ok": True})
+
+    command = text.split()[0].split("@")[0].lower()
+    markup = build_webapp_markup()
+
+    responses = {
+        "/start": (
+            "Добро пожаловать в Lingo Space 👋\n\n"
+            "Здесь можно подобрать курс английского, испанского "
+            "или итальянского, посмотреть расписание и записаться "
+            "на бесплатный пробный урок."
+        ),
+        "/courses": (
+            "Откройте Mini App, чтобы посмотреть программы "
+            "английского, испанского и итальянского."
+        ),
+        "/findcourse": (
+            "Ответьте на несколько вопросов в Mini App — "
+            "мы предложим подходящий курс."
+        ),
+        "/schedule": (
+            "Ближайшие группы и расписание доступны в Mini App."
+        ),
+        "/teachers": (
+            "Познакомьтесь с преподавателями Lingo Space "
+            "в Mini App."
+        ),
+        "/trial": (
+            "Запишитесь на бесплатный пробный урок через Mini App."
+        ),
+        "/contacts": (
+            "Контакты и адрес школы доступны в Mini App."
+        ),
+        "/help": (
+            "Доступные команды:\n"
+            "/courses — курсы\n"
+            "/findcourse — подбор курса\n"
+            "/schedule — расписание\n"
+            "/teachers — преподаватели\n"
+            "/trial — пробный урок\n"
+            "/contacts — контакты"
+        ),
+    }
+
+    response_text = responses.get(
+        command,
+        "Откройте Lingo Space, чтобы подобрать курс или "
+        "записаться на пробный урок.",
+    )
+
+    try:
+        send_telegram_message(
+            chat_id=chat_id,
+            text=response_text,
+            reply_markup=markup,
+        )
+    except httpx.HTTPError:
+        logger.exception("Failed to send Telegram message.")
+        return jsonify(
+            {"ok": False, "error": "Telegram API error"}
+        ), 502
 
     return jsonify({"ok": True})
 
