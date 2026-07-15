@@ -304,6 +304,51 @@ document.querySelectorAll(".course-action").forEach((button) => {
   });
 });
 
+
+document.querySelectorAll(".schedule-filter").forEach((button) => {
+  button.addEventListener("click", () => {
+    const selectedFilter = button.dataset.scheduleFilter;
+
+    document
+      .querySelectorAll(".schedule-filter")
+      .forEach((item) => item.classList.remove("active"));
+
+    button.classList.add("active");
+
+    document.querySelectorAll(".schedule-card").forEach((card) => {
+      const matchesLanguage =
+        card.dataset.scheduleLanguage === selectedFilter;
+      const matchesFormat =
+        card.dataset.scheduleFormat === selectedFilter;
+      const shouldShow =
+        selectedFilter === "all" ||
+        matchesLanguage ||
+        matchesFormat;
+
+      card.classList.toggle("is-hidden", !shouldShow);
+    });
+
+    telegram?.HapticFeedback?.selectionChanged();
+  });
+});
+
+document.querySelectorAll(".schedule-action").forEach((button) => {
+  button.addEventListener("click", () => {
+    const language = button.dataset.trialLanguage;
+    const course = button.dataset.trialCourse;
+    const trialCard = document.querySelector(".trial-preview-card");
+
+    if (trialCard) {
+      trialCard.dataset.selectedLanguage = language;
+      trialCard.dataset.selectedCourse = course;
+    }
+
+    telegram?.HapticFeedback?.impactOccurred("light");
+    scrollToSection("trial");
+  });
+});
+
+
 document.querySelectorAll(".bottom-nav a").forEach((link) => {
   link.addEventListener("click", () => {
     document
