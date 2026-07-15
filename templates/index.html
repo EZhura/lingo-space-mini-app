@@ -120,11 +120,30 @@
   </main>
 
   <nav class="bottom-nav" aria-label="Основная навигация">
-    <a class="nav-item active" href="#home">Главная</a>
-    <a class="nav-item" href="#languages">Курсы</a>
-    <a class="nav-item nav-item-main" href="#matching">Подбор</a>
-    <a class="nav-item" href="#schedule">Расписание</a>
-    <a class="nav-item" href="#contacts">Контакты</a>
+    <a class="nav-item active" href="#home">
+      <span class="nav-icon" aria-hidden="true">⌂</span>
+      <span>Главная</span>
+    </a>
+
+    <a class="nav-item" href="#languages">
+      <span class="nav-icon" aria-hidden="true">A</span>
+      <span>Курсы</span>
+    </a>
+
+    <a class="nav-item nav-item-main" href="#matching">
+      <span class="nav-icon" aria-hidden="true">✓</span>
+      <span>Подбор</span>
+    </a>
+
+    <a class="nav-item" href="#schedule">
+      <span class="nav-icon" aria-hidden="true">▦</span>
+      <span>Группы</span>
+    </a>
+
+    <a class="nav-item" href="#contacts">
+      <span class="nav-icon" aria-hidden="true">○</span>
+      <span>Связь</span>
+    </a>
   </nav>
 
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
