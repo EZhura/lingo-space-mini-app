@@ -123,7 +123,7 @@
               <span>До 6 человек</span>
             </div>
 
-            <button class="course-action" type="button" data-course="English Conversation">
+            <button class="course-action" type="button" data-course="English Conversation" data-language-choice="English">
               Подобрать этот курс
               <span aria-hidden="true">→</span>
             </button>
@@ -150,7 +150,7 @@
               <span>До 8 человек</span>
             </div>
 
-            <button class="course-action" type="button" data-course="Español para la vida">
+            <button class="course-action" type="button" data-course="Español para la vida" data-language-choice="Español">
               Подобрать этот курс
               <span aria-hidden="true">→</span>
             </button>
@@ -177,7 +177,7 @@
               <span>До 6 человек</span>
             </div>
 
-            <button class="course-action" type="button" data-course="Italiano da zero">
+            <button class="course-action" type="button" data-course="Italiano da zero" data-language-choice="Italiano">
               Подобрать этот курс
               <span aria-hidden="true">→</span>
             </button>
@@ -204,7 +204,7 @@
               <span>До 6 человек</span>
             </div>
 
-            <button class="course-action" type="button" data-course="Business English">
+            <button class="course-action" type="button" data-course="Business English" data-language-choice="English">
               Подобрать этот курс
               <span aria-hidden="true">→</span>
             </button>
@@ -226,26 +226,70 @@
     <section class="section matching-section" id="matching">
       <div class="section-heading">
         <span class="eyebrow">Персональный подбор</span>
-        <h2>Начнём с комфортного шага</h2>
+        <h2>Найдём ваш формат</h2>
         <p>
-          Ответьте на несколько вопросов — мы предложим
-          подходящую программу и формат.
+          Шесть коротких вопросов — и вы получите рекомендацию,
+          с которой удобно начать.
         </p>
       </div>
 
-      <div class="matching-preview">
-        <span class="step-label">Шаг 1 из 6</span>
-        <h3>Какой язык вы хотите изучать?</h3>
+      <div class="matching-card" id="matching-card">
+        <div class="matching-progress-row">
+          <span id="matching-step-label">Шаг 1 из 6</span>
+          <span id="matching-progress-value">17%</span>
+        </div>
+
+        <div class="matching-progress" aria-hidden="true">
+          <div class="matching-progress-bar" id="matching-progress-bar"></div>
+        </div>
 
         <div class="selected-course-note" id="selected-course-note" hidden>
           Вы выбрали: <strong id="selected-course-name"></strong>
         </div>
 
-        <div class="option-list">
-          <button type="button" class="option-button">English</button>
-          <button type="button" class="option-button">Español</button>
-          <button type="button" class="option-button">Italiano</button>
+        <div id="matching-question-area" aria-live="polite"></div>
+
+        <p class="matching-error" id="matching-error" hidden>
+          Выберите один вариант, чтобы продолжить.
+        </p>
+
+        <div class="matching-controls">
+          <button class="button matching-back" id="matching-back" type="button" disabled>
+            Назад
+          </button>
+          <button class="button button-primary matching-next" id="matching-next" type="button">
+            Далее
+          </button>
         </div>
+      </div>
+
+      <div class="matching-result" id="matching-result" hidden aria-live="polite">
+        <span class="result-badge">Ваш результат</span>
+        <p class="result-intro">Лучший старт для вас:</p>
+        <h3 id="result-title">English Conversation</h3>
+        <p id="result-description"></p>
+
+        <div class="result-summary" id="result-summary"></div>
+
+        <div class="result-actions">
+          <button class="button button-primary" type="button" data-scroll-to="trial">
+            Записаться на пробный урок
+          </button>
+          <button class="button button-secondary" id="matching-restart" type="button">
+            Пройти ещё раз
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section trial-preview" id="trial">
+      <div class="trial-preview-card">
+        <span class="eyebrow">Бесплатный пробный урок</span>
+        <h2>Познакомимся без обязательств</h2>
+        <p>
+          На следующем этапе здесь появится форма записи,
+          выбор удобного времени и отправка заявки администратору.
+        </p>
       </div>
     </section>
   </main>
