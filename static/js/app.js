@@ -292,7 +292,6 @@ document.querySelectorAll(".course-action").forEach((button) => {
       language: button.dataset.languageChoice,
     };
     matchingState.selectedCourse = button.dataset.course;
-    setTrialSelection(button.dataset.languageChoice, button.dataset.course);
 
     selectedCourseName.textContent = button.dataset.course;
     selectedCourseNote.hidden = false;
@@ -336,61 +335,114 @@ document.querySelectorAll(".schedule-filter").forEach((button) => {
 
 
 
+const trialModal=document.getElementById("trial-modal");
+const trialDialog=trialModal.querySelector(".trial-modal-dialog");
 const trialForm=document.getElementById("trial-form");
 const trialSuccess=document.getElementById("trial-success");
 const trialError=document.getElementById("trial-form-error");
 const trialLanguage=document.getElementById("trial-language");
 const trialCourse=document.getElementById("trial-course");
+const trialTeacher=document.getElementById("trial-teacher");
 const trialSelection=document.getElementById("trial-selection");
 const trialSelectionText=document.getElementById("trial-selection-text");
-const trialTeacher=document.getElementById("trial-teacher");
+let lastFocusedElement=null;
 
 function setTrialSelection(language="",course=""){
   if(language) trialLanguage.value=language;
   if(course) trialCourse.value=course;
+
   if(language||course){
     trialSelectionText.textContent=[course,language].filter(Boolean).join(" · ");
     trialSelection.hidden=false;
   }
 }
 
+function openTrialModal(options={}){
+  lastFocusedElement=document.activeElement;
+
+  if(options.language||options.course){
+    setTrialSelection(options.language||"",options.course||"");
+  }
+
+  if(options.teacher){
+    trialTeacher.value=options.teacher;
+  }
+
+  trialForm.hidden=false;
+  trialSuccess.hidden=true;
+  trialError.hidden=true;
+  trialModal.hidden=false;
+  document.body.classList.add("modal-open");
+
+  requestAnimationFrame(()=>{
+    document.getElementById("trial-name").focus();
+    trialDialog.scrollTop=0;
+  });
+
+  telegram?.HapticFeedback?.impactOccurred("light");
+}
+
+function closeTrialModal(){
+  trialModal.hidden=true;
+  document.body.classList.remove("modal-open");
+  lastFocusedElement?.focus?.();
+}
+
+document.querySelectorAll("[data-close-trial-modal]").forEach((button)=>{
+  button.addEventListener("click",closeTrialModal);
+});
+
+document.addEventListener("keydown",(event)=>{
+  if(event.key==="Escape"&&!trialModal.hidden){
+    closeTrialModal();
+  }
+});
+
 document.querySelectorAll(".schedule-action").forEach((button)=>{
   button.addEventListener("click",()=>{
-    setTrialSelection(button.dataset.trialLanguage,button.dataset.trialCourse);
-    trialForm.hidden=false;trialSuccess.hidden=true;
-    scrollToSection("trial");
+    openTrialModal({
+      language:button.dataset.trialLanguage,
+      course:button.dataset.trialCourse
+    });
+  });
+});
+
+document.querySelectorAll(".teacher-action").forEach((button)=>{
+  button.addEventListener("click",()=>{
+    openTrialModal({
+      language:button.dataset.language,
+      course:button.dataset.course,
+      teacher:button.dataset.teacher
+    });
   });
 });
 
 document.querySelectorAll("[data-scroll-to='trial']").forEach((button)=>{
-  button.addEventListener("click",()=>{
-    const title=document.getElementById("result-title")?.textContent||"";
-    const language=matchingState.answers.language||"";
-    if(title) setTrialSelection(language,title);
-    trialForm.hidden=false;trialSuccess.hidden=true;
-  });
-});
+  button.addEventListener("click",(event)=>{
+    event.preventDefault();
 
+    const resultTitle=document.getElementById("result-title")?.textContent||"";
+    const resultLanguage=matchingState.answers.language||"";
 
-document.querySelectorAll(".teacher-action").forEach((button)=>{
-  button.addEventListener("click",()=>{
-    setTrialSelection(button.dataset.language,button.dataset.course);
-    trialTeacher.value=button.dataset.teacher;
-    trialForm.hidden=false;
-    trialSuccess.hidden=true;
-    telegram?.HapticFeedback?.impactOccurred("light");
-    scrollToSection("trial");
+    openTrialModal({
+      language:resultTitle?resultLanguage:"",
+      course:resultTitle?resultTitle:""
+    });
   });
 });
 
 document.getElementById("trial-selection-clear").addEventListener("click",()=>{
-  trialLanguage.value="";trialCourse.value="";trialSelection.hidden=true;trialLanguage.focus();
+  trialLanguage.value="";
+  trialCourse.value="";
+  trialTeacher.value="Не важно";
+  trialSelection.hidden=true;
+  trialLanguage.focus();
 });
 
 trialForm.addEventListener("submit",async(event)=>{
   event.preventDefault();
   trialError.hidden=true;
-  trialForm.querySelectorAll(".invalid").forEach((el)=>el.classList.remove("invalid"));
+  trialForm.querySelectorAll(".invalid").forEach((element)=>element.classList.remove("invalid"));
 
   const required=[
     document.getElementById("trial-name"),
@@ -399,26 +451,38 @@ trialForm.addEventListener("submit",async(event)=>{
     trialCourse,
     document.getElementById("trial-time")
   ];
-  const invalid=required.find((el)=>!el.value.trim());
+
+  const invalid=required.find((element)=>!element.value.trim());
   const format=trialForm.querySelector('input[name="format"]:checked');
 
   if(invalid){
-    invalid.classList.add("invalid");invalid.focus();
-    trialError.textContent="Заполните все обязательные поля.";trialError.hidden=false;return;
+    invalid.classList.add("invalid");
+    invalid.focus();
+    trialError.textContent="Заполните все обязательные поля.";
+    trialError.hidden=false;
+    return;
   }
+
   if(!format){
-    trialError.textContent="Выберите удобный формат занятий.";trialError.hidden=false;return;
+    trialError.textContent="Выберите удобный формат занятий.";
+    trialError.hidden=false;
+    return;
   }
+
   if(!document.getElementById("trial-consent").checked){
-    trialError.textContent="Подтвердите согласие на обработку данных.";trialError.hidden=false;return;
+    trialError.textContent="Подтвердите согласие на обработку данных.";
+    trialError.hidden=false;
+    return;
   }
 
   const submit=trialForm.querySelector(".trial-submit");
   const label=trialForm.querySelector(".trial-submit-label");
   const loading=trialForm.querySelector(".trial-submit-loading");
-  const tgUser=telegram?.initDataUnsafe?.user;
+  const telegramUser=telegram?.initDataUnsafe?.user;
 
-  submit.disabled=true;label.hidden=true;loading.hidden=false;
+  submit.disabled=true;
+  label.hidden=true;
+  loading.hidden=false;
 
   try{
     const response=await fetch("/api/trial",{
@@ -433,24 +497,40 @@ trialForm.addEventListener("submit",async(event)=>{
         preferred_time:document.getElementById("trial-time").value,
         teacher:trialTeacher.value,
         source:telegram?"Telegram Mini App":"Web browser",
-        telegram_user_id:tgUser?.id||null,
-        telegram_username:tgUser?.username||""
+        telegram_user_id:telegramUser?.id||null,
+        telegram_username:telegramUser?.username||""
       })
     });
+
     const result=await response.json();
-    if(!response.ok||!result.ok) throw new Error(result.error||"Не удалось отправить заявку.");
-    trialForm.hidden=true;trialSuccess.hidden=false;
+
+    if(!response.ok||!result.ok){
+      throw new Error(result.error||"Не удалось отправить заявку.");
+    }
+
+    trialForm.hidden=true;
+    trialSuccess.hidden=false;
+    trialDialog.scrollTop=0;
     telegram?.HapticFeedback?.notificationOccurred("success");
   }catch(error){
-    trialError.textContent=error.message||"Ошибка отправки.";trialError.hidden=false;
+    trialError.textContent=error.message||"Ошибка отправки.";
+    trialError.hidden=false;
+    telegram?.HapticFeedback?.notificationOccurred("error");
   }finally{
-    submit.disabled=false;label.hidden=false;loading.hidden=true;
+    submit.disabled=false;
+    label.hidden=false;
+    loading.hidden=true;
   }
 });
 
 document.getElementById("trial-new-request").addEventListener("click",()=>{
-  trialForm.reset();trialSelection.hidden=true;trialError.hidden=true;
-  trialSuccess.hidden=true;trialForm.hidden=false;
+  trialForm.reset();
+  trialSelection.hidden=true;
+  trialError.hidden=true;
+  trialSuccess.hidden=true;
+  trialForm.hidden=false;
+  trialDialog.scrollTop=0;
+  document.getElementById("trial-name").focus();
 });
 
 document.querySelectorAll(".bottom-nav a").forEach((link) => {
