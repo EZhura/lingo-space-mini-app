@@ -456,14 +456,98 @@
     </section>
 
 
-    <section class="section trial-preview" id="trial">
-      <div class="trial-preview-card">
+    <section class="section trial-section" id="trial">
+      <div class="section-heading">
         <span class="eyebrow">Бесплатный пробный урок</span>
-        <h2>Познакомимся без обязательств</h2>
-        <p>
-          На следующем этапе здесь появится форма записи,
-          выбор удобного времени и отправка заявки администратору.
-        </p>
+        <h2>Познакомимся и выберем лучший старт</h2>
+        <p>Оставьте контакт — администратор уточнит детали, поможет с уровнем и предложит удобное время.</p>
+      </div>
+
+      <div class="trial-card">
+        <form class="trial-form" id="trial-form" novalidate>
+          <div class="trial-selection" id="trial-selection" hidden>
+            <div>
+              <span>Вы выбрали</span>
+              <strong id="trial-selection-text"></strong>
+            </div>
+            <button type="button" id="trial-selection-clear">Изменить</button>
+          </div>
+
+          <label class="form-field" for="trial-name">
+            <span>Ваше имя</span>
+            <input id="trial-name" name="name" type="text" maxlength="80" placeholder="Например, Анна" required>
+          </label>
+
+          <label class="form-field" for="trial-contact">
+            <span>Telegram, WhatsApp или email</span>
+            <input id="trial-contact" name="contact" type="text" maxlength="120" placeholder="@username или email" required>
+          </label>
+
+          <label class="form-field" for="trial-language">
+            <span>Язык</span>
+            <select id="trial-language" name="language" required>
+              <option value="">Выберите язык</option>
+              <option value="English">English</option>
+              <option value="Español">Español</option>
+              <option value="Italiano">Italiano</option>
+            </select>
+          </label>
+
+          <label class="form-field" for="trial-course">
+            <span>Курс или цель</span>
+            <select id="trial-course" name="course" required>
+              <option value="">Выберите вариант</option>
+              <option value="English Conversation">English Conversation</option>
+              <option value="Business English">Business English</option>
+              <option value="Español para la vida">Español para la vida</option>
+              <option value="Italiano da zero">Italiano da zero</option>
+              <option value="Conversation Club">Conversation Club</option>
+              <option value="Нужна рекомендация">Нужна рекомендация</option>
+            </select>
+          </label>
+
+          <fieldset class="form-fieldset">
+            <legend>Удобный формат</legend>
+            <div class="format-options">
+              <label class="format-option"><input type="radio" name="format" value="Онлайн"><span>Онлайн</span></label>
+              <label class="format-option"><input type="radio" name="format" value="Офлайн в Валенсии"><span>Офлайн в Валенсии</span></label>
+              <label class="format-option"><input type="radio" name="format" value="Нужна рекомендация"><span>Нужна рекомендация</span></label>
+            </div>
+          </fieldset>
+
+          <label class="form-field" for="trial-time">
+            <span>Когда удобнее заниматься?</span>
+            <select id="trial-time" name="preferred_time" required>
+              <option value="">Выберите время</option>
+              <option value="Утром">Утром</option>
+              <option value="Днём">Днём</option>
+              <option value="Вечером">Вечером</option>
+              <option value="Обсудить с администратором">Обсудить с администратором</option>
+            </select>
+          </label>
+
+          <label class="form-consent">
+            <input id="trial-consent" type="checkbox">
+            <span>Согласен(на) на обработку данных для связи по заявке.</span>
+          </label>
+
+          <p class="form-message form-error" id="trial-form-error" hidden></p>
+
+          <button class="button button-primary trial-submit" type="submit">
+            <span class="trial-submit-label">Отправить заявку</span>
+            <span class="trial-submit-loading" hidden>Отправляем…</span>
+          </button>
+
+          <p class="trial-note">Это демо: заявка придёт администратору Lingo Space в Telegram.</p>
+        </form>
+
+        <div class="trial-success" id="trial-success" hidden aria-live="polite">
+          <div class="success-mark">✓</div>
+          <span class="eyebrow">Заявка отправлена</span>
+          <h3>Спасибо! Мы скоро свяжемся с вами</h3>
+          <p>Администратор уточнит ваш уровень, цель и предложит удобное время пробного урока.</p>
+          <button class="button button-secondary" id="trial-new-request" type="button">Отправить ещё одну заявку</button>
+        </div>
       </div>
     </section>
   </main>

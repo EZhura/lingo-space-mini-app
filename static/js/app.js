@@ -292,6 +292,7 @@ document.querySelectorAll(".course-action").forEach((button) => {
       language: button.dataset.languageChoice,
     };
     matchingState.selectedCourse = button.dataset.course;
+    setTrialSelection(button.dataset.languageChoice, button.dataset.course);
 
     selectedCourseName.textContent = button.dataset.course;
     selectedCourseNote.hidden = false;
@@ -348,6 +349,110 @@ document.querySelectorAll(".schedule-action").forEach((button) => {
   });
 });
 
+
+
+const trialForm=document.getElementById("trial-form");
+const trialSuccess=document.getElementById("trial-success");
+const trialError=document.getElementById("trial-form-error");
+const trialLanguage=document.getElementById("trial-language");
+const trialCourse=document.getElementById("trial-course");
+const trialSelection=document.getElementById("trial-selection");
+const trialSelectionText=document.getElementById("trial-selection-text");
+
+function setTrialSelection(language="",course=""){
+  if(language) trialLanguage.value=language;
+  if(course) trialCourse.value=course;
+  if(language||course){
+    trialSelectionText.textContent=[course,language].filter(Boolean).join(" · ");
+    trialSelection.hidden=false;
+  }
+}
+
+document.querySelectorAll(".schedule-action").forEach((button)=>{
+  button.addEventListener("click",()=>{
+    setTrialSelection(button.dataset.trialLanguage,button.dataset.trialCourse);
+    trialForm.hidden=false;trialSuccess.hidden=true;
+    scrollToSection("trial");
+  });
+});
+
+document.querySelectorAll("[data-scroll-to='trial']").forEach((button)=>{
+  button.addEventListener("click",()=>{
+    const title=document.getElementById("result-title")?.textContent||"";
+    const language=matchingState.answers.language||"";
+    if(title) setTrialSelection(language,title);
+    trialForm.hidden=false;trialSuccess.hidden=true;
+  });
+});
+
+document.getElementById("trial-selection-clear").addEventListener("click",()=>{
+  trialLanguage.value="";trialCourse.value="";trialSelection.hidden=true;trialLanguage.focus();
+});
+
+trialForm.addEventListener("submit",async(event)=>{
+  event.preventDefault();
+  trialError.hidden=true;
+  trialForm.querySelectorAll(".invalid").forEach((el)=>el.classList.remove("invalid"));
+
+  const required=[
+    document.getElementById("trial-name"),
+    document.getElementById("trial-contact"),
+    trialLanguage,
+    trialCourse,
+    document.getElementById("trial-time")
+  ];
+  const invalid=required.find((el)=>!el.value.trim());
+  const format=trialForm.querySelector('input[name="format"]:checked');
+
+  if(invalid){
+    invalid.classList.add("invalid");invalid.focus();
+    trialError.textContent="Заполните все обязательные поля.";trialError.hidden=false;return;
+  }
+  if(!format){
+    trialError.textContent="Выберите удобный формат занятий.";trialError.hidden=false;return;
+  }
+  if(!document.getElementById("trial-consent").checked){
+    trialError.textContent="Подтвердите согласие на обработку данных.";trialError.hidden=false;return;
+  }
+
+  const submit=trialForm.querySelector(".trial-submit");
+  const label=trialForm.querySelector(".trial-submit-label");
+  const loading=trialForm.querySelector(".trial-submit-loading");
+  const tgUser=telegram?.initDataUnsafe?.user;
+
+  submit.disabled=true;label.hidden=true;loading.hidden=false;
+
+  try{
+    const response=await fetch("/api/trial",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        name:document.getElementById("trial-name").value.trim(),
+        contact:document.getElementById("trial-contact").value.trim(),
+        language:trialLanguage.value,
+        course:trialCourse.value,
+        format:format.value,
+        preferred_time:document.getElementById("trial-time").value,
+        source:telegram?"Telegram Mini App":"Web browser",
+        telegram_user_id:tgUser?.id||null,
+        telegram_username:tgUser?.username||""
+      })
+    });
+    const result=await response.json();
+    if(!response.ok||!result.ok) throw new Error(result.error||"Не удалось отправить заявку.");
+    trialForm.hidden=true;trialSuccess.hidden=false;
+    telegram?.HapticFeedback?.notificationOccurred("success");
+  }catch(error){
+    trialError.textContent=error.message||"Ошибка отправки.";trialError.hidden=false;
+  }finally{
+    submit.disabled=false;label.hidden=false;loading.hidden=true;
+  }
+});
+
+document.getElementById("trial-new-request").addEventListener("click",()=>{
+  trialForm.reset();trialSelection.hidden=true;trialError.hidden=true;
+  trialSuccess.hidden=true;trialForm.hidden=false;
+});
 
 document.querySelectorAll(".bottom-nav a").forEach((link) => {
   link.addEventListener("click", () => {
