@@ -83,6 +83,7 @@ def create_trial_request():
         return jsonify({"ok":False,"error":"Заполните все обязательные поля."}),400
     if not ADMIN_CHAT_ID:
         return jsonify({"ok":False,"error":"Канал заявок пока не настроен."}),503
+    teacher=str(data.get("teacher","Не важно")).strip() or "Не важно"
     username=str(data.get("telegram_username","")).strip()
     user_id=data.get("telegram_user_id")
     tg_context=f"@{username}" if username else (f"ID {user_id}" if user_id else "не указан")
@@ -93,7 +94,8 @@ def create_trial_request():
       f"Язык: {fields['language']}\n"
       f"Курс: {fields['course']}\n"
       f"Формат: {fields['format']}\n"
-      f"Удобное время: {fields['preferred_time']}\n\n"
+      f"Удобное время: {fields['preferred_time']}\n"
+      f"Преподаватель: {teacher}\n\n"
       f"Источник: {str(data.get('source','Web')).strip()}\n"
       f"Telegram: {tg_context}"
     )

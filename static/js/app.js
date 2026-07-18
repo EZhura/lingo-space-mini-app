@@ -333,21 +333,6 @@ document.querySelectorAll(".schedule-filter").forEach((button) => {
   });
 });
 
-document.querySelectorAll(".schedule-action").forEach((button) => {
-  button.addEventListener("click", () => {
-    const language = button.dataset.trialLanguage;
-    const course = button.dataset.trialCourse;
-    const trialCard = document.querySelector(".trial-preview-card");
-
-    if (trialCard) {
-      trialCard.dataset.selectedLanguage = language;
-      trialCard.dataset.selectedCourse = course;
-    }
-
-    telegram?.HapticFeedback?.impactOccurred("light");
-    scrollToSection("trial");
-  });
-});
 
 
 
@@ -358,6 +343,7 @@ const trialLanguage=document.getElementById("trial-language");
 const trialCourse=document.getElementById("trial-course");
 const trialSelection=document.getElementById("trial-selection");
 const trialSelectionText=document.getElementById("trial-selection-text");
+const trialTeacher=document.getElementById("trial-teacher");
 
 function setTrialSelection(language="",course=""){
   if(language) trialLanguage.value=language;
@@ -382,6 +368,18 @@ document.querySelectorAll("[data-scroll-to='trial']").forEach((button)=>{
     const language=matchingState.answers.language||"";
     if(title) setTrialSelection(language,title);
     trialForm.hidden=false;trialSuccess.hidden=true;
+  });
+});
+
+
+document.querySelectorAll(".teacher-action").forEach((button)=>{
+  button.addEventListener("click",()=>{
+    setTrialSelection(button.dataset.language,button.dataset.course);
+    trialTeacher.value=button.dataset.teacher;
+    trialForm.hidden=false;
+    trialSuccess.hidden=true;
+    telegram?.HapticFeedback?.impactOccurred("light");
+    scrollToSection("trial");
   });
 });
 
@@ -433,6 +431,7 @@ trialForm.addEventListener("submit",async(event)=>{
         course:trialCourse.value,
         format:format.value,
         preferred_time:document.getElementById("trial-time").value,
+        teacher:trialTeacher.value,
         source:telegram?"Telegram Mini App":"Web browser",
         telegram_user_id:tgUser?.id||null,
         telegram_username:tgUser?.username||""

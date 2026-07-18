@@ -223,6 +223,76 @@
       </div>
     </section>
 
+    <section class="section teachers-section" id="teachers">
+      <div class="section-heading section-heading-row">
+        <div>
+          <span class="eyebrow">Команда Lingo Space</span>
+          <h2>Наши преподаватели</h2>
+          <p>Поддерживают, вдохновляют и помогают использовать язык в реальной жизни.</p>
+        </div>
+      </div>
+
+      <div class="teacher-list">
+        <article class="teacher-card">
+          <img src="{{ url_for('static', filename='images/teacher_emma.jpg') }}" alt="Преподаватель английского Emma">
+          <div class="teacher-content">
+            <div class="teacher-title-row">
+              <h3>Emma</h3>
+              <span class="teacher-certificate">CELTA</span>
+            </div>
+            <p class="teacher-language">English</p>
+            <p>Business English, разговорная практика и подготовка к интервью.</p>
+            <div class="teacher-footer">
+              <span>10+ лет опыта</span>
+              <button class="teacher-action" type="button" data-teacher="Emma" data-language="English" data-course="English Conversation">Записаться</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="teacher-card">
+          <img src="{{ url_for('static', filename='images/teacher_lucia.jpg') }}" alt="Преподаватель испанского Lucía">
+          <div class="teacher-content">
+            <div class="teacher-title-row">
+              <h3>Lucía</h3>
+              <span class="teacher-certificate">ELE</span>
+            </div>
+            <p class="teacher-language">Español</p>
+            <p>Испанский для жизни, адаптации в Испании и разговорной практики.</p>
+            <div class="teacher-footer">
+              <span>8+ лет опыта</span>
+              <button class="teacher-action" type="button" data-teacher="Lucía" data-language="Español" data-course="Español para la vida">Записаться</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="teacher-card">
+          <img src="{{ url_for('static', filename='images/teacher_giulia.jpg') }}" alt="Преподаватель итальянского Giulia">
+          <div class="teacher-content">
+            <div class="teacher-title-row">
+              <h3>Giulia</h3>
+              <span class="teacher-certificate">DITALS</span>
+            </div>
+            <p class="teacher-language">Italiano</p>
+            <p>Итальянский с нуля, живой разговорный язык, культура и путешествия.</p>
+            <div class="teacher-footer">
+              <span>7+ лет опыта</span>
+              <button class="teacher-action" type="button" data-teacher="Giulia" data-language="Italiano" data-course="Italiano da zero">Записаться</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="atmosphere-section" aria-label="Как проходят занятия">
+      <img src="{{ url_for('static', filename='images/class_atmosphere.jpg') }}" alt="Небольшая группа занимается языком в Lingo Space">
+      <div class="atmosphere-overlay"></div>
+      <div class="atmosphere-content">
+        <span class="atmosphere-label">Живая практика</span>
+        <h2>Практикуемся с первого занятия</h2>
+        <p>Говорим, слушаем и применяем язык в реальных ситуациях. Ошибаться здесь нормально — важно пробовать.</p>
+      </div>
+    </section>
+
     <section class="section matching-section" id="matching">
       <div class="section-heading">
         <span class="eyebrow">Персональный подбор</span>
@@ -463,6 +533,14 @@
         <p>Оставьте контакт — администратор уточнит детали, поможет с уровнем и предложит удобное время.</p>
       </div>
 
+      <div class="trial-visual">
+        <img src="{{ url_for('static', filename='images/trial_lesson.jpg') }}" alt="Пробный урок с преподавателем Lingo Space">
+        <div class="trial-visual-copy">
+          <span>Первое знакомство</span>
+          <strong>Определим уровень и наметим понятный маршрут обучения</strong>
+        </div>
+      </div>
+
       <div class="trial-card">
         <form class="trial-form" id="trial-form" novalidate>
           <div class="trial-selection" id="trial-selection" hidden>
@@ -515,6 +593,16 @@
             </div>
           </fieldset>
 
+          <label class="form-field" for="trial-teacher">
+            <span>Предпочтительный преподаватель</span>
+            <select id="trial-teacher" name="teacher">
+              <option value="Не важно">Не важно</option>
+              <option value="Emma">Emma — English</option>
+              <option value="Lucía">Lucía — Español</option>
+              <option value="Giulia">Giulia — Italiano</option>
+            </select>
+          </label>
+
           <label class="form-field" for="trial-time">
             <span>Когда удобнее заниматься?</span>
             <select id="trial-time" name="preferred_time" required>
@@ -547,6 +635,84 @@
           <h3>Спасибо! Мы скоро свяжемся с вами</h3>
           <p>Администратор уточнит ваш уровень, цель и предложит удобное время пробного урока.</p>
           <button class="button button-secondary" id="trial-new-request" type="button">Отправить ещё одну заявку</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contacts-section" id="contacts">
+      <div class="section-heading">
+        <span class="eyebrow">Мы на связи</span>
+        <h2>Связаться с Lingo Space</h2>
+        <p>Задайте вопрос или оставьте заявку — ответим и поможем выбрать подходящий формат.</p>
+      </div>
+
+      <div class="contacts-layout">
+        <div class="contact-panel">
+          <div class="contact-item">
+            <span class="contact-icon" aria-hidden="true">⌖</span>
+            <div>
+              <strong>Valencia, Spain</strong>
+              <p>Точный адрес офлайн-занятий сообщим после записи.</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-icon" aria-hidden="true">◷</span>
+            <div>
+              <strong>Часы работы</strong>
+              <p>Пн–Пт: 9:00–21:00<br>Сб: 10:00–14:00</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-icon" aria-hidden="true">➤</span>
+            <div>
+              <strong>Telegram</strong>
+              <a href="https://t.me/LingoSpaceDemoBot" target="_blank" rel="noopener">@LingoSpaceDemoBot</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-icon" aria-hidden="true">✉</span>
+            <div>
+              <strong>Email</strong>
+              <a href="mailto:hello@lingospace.demo">hello@lingospace.demo</a>
+            </div>
+          </div>
+
+          <div class="contact-actions">
+            <button class="button button-primary" type="button" data-scroll-to="trial">Записаться на пробный урок</button>
+            <a class="button button-secondary" href="https://www.google.com/maps/search/?api=1&query=Valencia%2C%20Spain" target="_blank" rel="noopener">Открыть Валенсию на карте</a>
+          </div>
+        </div>
+
+        <div class="faq-panel">
+          <h3>Часто задаваемые вопросы</h3>
+
+          <details>
+            <summary>Как проходит пробный урок?</summary>
+            <p>Мы знакомимся, определяем текущий уровень, обсуждаем цель и предлагаем подходящий курс и формат.</p>
+          </details>
+
+          <details>
+            <summary>Можно ли заниматься онлайн?</summary>
+            <p>Да. Онлайн-группы и индивидуальные занятия доступны из любой страны.</p>
+          </details>
+
+          <details>
+            <summary>Как понять свой уровень?</summary>
+            <p>Начните с подбора курса в Mini App. На пробном уроке преподаватель дополнительно уточнит уровень.</p>
+          </details>
+
+          <details>
+            <summary>Есть ли офлайн-занятия?</summary>
+            <p>Да, в Валенсии. Точный адрес и инструкции администратор отправит после подтверждения записи.</p>
+          </details>
+
+          <details>
+            <summary>Можно ли изменить группу?</summary>
+            <p>Да. Если время или темп не подходят, администратор предложит другую группу или формат.</p>
+          </details>
         </div>
       </div>
     </section>
