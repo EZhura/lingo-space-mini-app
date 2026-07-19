@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="ru">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,11 +9,15 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
+
 <body>
   <main class="app-shell">
     <header class="topbar">
@@ -41,29 +46,19 @@
       </p>
 
       <div class="hero-actions">
-        <button
-          class="button button-primary"
-          type="button"
-          data-scroll-to="matching"
-        >
+        <button class="button button-primary" type="button" data-scroll-to="matching">
           Подобрать курс
         </button>
 
-        <button
-          class="button button-secondary"
-          type="button"
-          data-scroll-to="courses"
-        >
+        <button class="button button-secondary" type="button" data-scroll-to="courses">
           Смотреть программы
         </button>
       </div>
 
       <div class="hero-visual">
-        <img
-          class="hero-image"
+        <img class="hero-image"
           src="{{ url_for('static', filename='images/hero_main.jpg') }}"
-          alt="Студенты Lingo Space общаются за круглым столом"
-        >
+          alt="Студенты Lingo Space общаются за круглым столом">
 
         <div class="hero-overlay"></div>
 
@@ -123,7 +118,8 @@
               <span>До 6 человек</span>
             </div>
 
-            <button class="course-action" type="button" data-course="English Conversation" data-language-choice="English">
+            <button class="course-action" type="button" data-course="English Conversation"
+              data-language-choice="English">
               Подобрать этот курс
               <span aria-hidden="true">→</span>
             </button>
@@ -150,7 +146,8 @@
               <span>До 8 человек</span>
             </div>
 
-            <button class="course-action" type="button" data-course="Español para la vida" data-language-choice="Español">
+            <button class="course-action" type="button" data-course="Español para la vida"
+              data-language-choice="Español">
               Подобрать этот курс
               <span aria-hidden="true">→</span>
             </button>
@@ -234,7 +231,9 @@
 
       <div class="teacher-list">
         <article class="teacher-card">
-          <img src="{{ url_for('static', filename='images/teacher_emma.jpg') }}" alt="Преподаватель английского Emma">
+          <img
+            src="{{ url_for('static', filename='images/teacher_emma.jpg') }}"
+            alt="Преподаватель английского Emma">
           <div class="teacher-content">
             <div class="teacher-title-row">
               <h3>Emma</h3>
@@ -244,13 +243,16 @@
             <p>Business English, разговорная практика и подготовка к интервью.</p>
             <div class="teacher-footer">
               <span>10+ лет опыта</span>
-              <button class="teacher-action" type="button" data-teacher="Emma" data-language="English" data-course="English Conversation">Записаться</button>
+              <button class="teacher-action" type="button" data-teacher="Emma" data-language="English"
+                data-course="English Conversation">Записаться</button>
             </div>
           </div>
         </article>
 
         <article class="teacher-card">
-          <img src="{{ url_for('static', filename='images/teacher_lucia.jpg') }}" alt="Преподаватель испанского Lucía">
+          <img
+            src="{{ url_for('static', filename='images/teacher_lucia.jpg') }}"
+            alt="Преподаватель испанского Lucía">
           <div class="teacher-content">
             <div class="teacher-title-row">
               <h3>Lucía</h3>
@@ -260,13 +262,16 @@
             <p>Испанский для жизни, адаптации в Испании и разговорной практики.</p>
             <div class="teacher-footer">
               <span>8+ лет опыта</span>
-              <button class="teacher-action" type="button" data-teacher="Lucía" data-language="Español" data-course="Español para la vida">Записаться</button>
+              <button class="teacher-action" type="button" data-teacher="Lucía" data-language="Español"
+                data-course="Español para la vida">Записаться</button>
             </div>
           </div>
         </article>
 
         <article class="teacher-card">
-          <img src="{{ url_for('static', filename='images/teacher_marco.jpg') }}" alt="Преподаватель итальянского Marco">
+          <img
+            src="{{ url_for('static', filename='images/teacher_marco.jpg') }}"
+            alt="Преподаватель итальянского Marco">
           <div class="teacher-content">
             <div class="teacher-title-row">
               <h3>Marco</h3>
@@ -276,7 +281,8 @@
             <p>Итальянский с нуля, живой разговорный язык, культура и путешествия.</p>
             <div class="teacher-footer">
               <span>7+ лет опыта</span>
-              <button class="teacher-action" type="button" data-teacher="Marco" data-language="Italiano" data-course="Italiano da zero">Записаться</button>
+              <button class="teacher-action" type="button" data-teacher="Marco" data-language="Italiano"
+                data-course="Italiano da zero">Записаться</button>
             </div>
           </div>
         </article>
@@ -284,7 +290,9 @@
     </section>
 
     <section class="atmosphere-section" aria-label="Как проходят занятия">
-      <img src="{{ url_for('static', filename='images/class_atmosphere.jpg') }}" alt="Небольшая группа занимается языком в Lingo Space">
+      <img
+        src="{{ url_for('static', filename='images/class_atmosphere.jpg') }}"
+        alt="Небольшая группа занимается языком в Lingo Space">
       <div class="atmosphere-overlay"></div>
       <div class="atmosphere-content">
         <span class="atmosphere-label">Живая практика</span>
@@ -402,12 +410,8 @@
               <span>Преподаватель Emma</span>
             </div>
 
-            <button
-              class="schedule-action"
-              type="button"
-              data-trial-language="English"
-              data-trial-course="Conversation Club"
-            >
+            <button class="schedule-action" type="button" data-trial-language="English"
+              data-trial-course="Conversation Club">
               Записаться на пробный урок
               <span aria-hidden="true">→</span>
             </button>
@@ -435,12 +439,8 @@
               <span>Преподаватель Lucía</span>
             </div>
 
-            <button
-              class="schedule-action"
-              type="button"
-              data-trial-language="Español"
-              data-trial-course="Español para la vida"
-            >
+            <button class="schedule-action" type="button" data-trial-language="Español"
+              data-trial-course="Español para la vida">
               Записаться на пробный урок
               <span aria-hidden="true">→</span>
             </button>
@@ -468,12 +468,8 @@
               <span>Преподаватель Marco</span>
             </div>
 
-            <button
-              class="schedule-action"
-              type="button"
-              data-trial-language="Italiano"
-              data-trial-course="Italiano da zero"
-            >
+            <button class="schedule-action" type="button" data-trial-language="Italiano"
+              data-trial-course="Italiano da zero">
               Записаться на пробный урок
               <span aria-hidden="true">→</span>
             </button>
@@ -501,12 +497,8 @@
               <span>Преподаватель Emma</span>
             </div>
 
-            <button
-              class="schedule-action"
-              type="button"
-              data-trial-language="English"
-              data-trial-course="Business English"
-            >
+            <button class="schedule-action" type="button" data-trial-language="English"
+              data-trial-course="Business English">
               Записаться на пробный урок
               <span aria-hidden="true">→</span>
             </button>
@@ -568,8 +560,11 @@
           </div>
 
           <div class="contact-actions">
-            <button class="button button-primary" type="button" data-scroll-to="trial">Записаться на пробный урок</button>
-            <a class="button button-secondary" href="https://www.google.com/maps/search/?api=1&query=Valencia%2C%20Spain" target="_blank" rel="noopener">Открыть Валенсию на карте</a>
+            <button class="button button-primary" type="button" data-scroll-to="trial">Записаться на пробный
+              урок</button>
+            <a class="button button-secondary"
+              href="https://www.google.com/maps/search/?api=1&query=Valencia%2C%20Spain" target="_blank"
+              rel="noopener">Посмотреть расположение школы</a>
           </div>
         </div>
 
@@ -635,18 +630,8 @@
   <div class="trial-modal" id="trial-modal" hidden>
     <div class="trial-modal-backdrop" data-close-trial-modal></div>
 
-    <section
-      class="trial-modal-dialog"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="trial-modal-title"
-    >
-      <button
-        class="trial-modal-close"
-        type="button"
-        aria-label="Закрыть форму"
-        data-close-trial-modal
-      >×</button>
+    <section class="trial-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="trial-modal-title">
+      <button class="trial-modal-close" type="button" aria-label="Закрыть форму" data-close-trial-modal>×</button>
 
       <div class="trial-modal-header">
         <span class="eyebrow">Бесплатный пробный урок</span>
@@ -670,7 +655,8 @@
 
         <label class="form-field" for="trial-contact">
           <span>Telegram, WhatsApp или email</span>
-          <input id="trial-contact" name="contact" type="text" maxlength="120" placeholder="@username или email" required>
+          <input id="trial-contact" name="contact" type="text" maxlength="120" placeholder="@username или email"
+            required>
         </label>
 
         <div class="trial-form-grid">
@@ -702,8 +688,10 @@
           <legend>Удобный формат</legend>
           <div class="format-options">
             <label class="format-option"><input type="radio" name="format" value="Онлайн"><span>Онлайн</span></label>
-            <label class="format-option"><input type="radio" name="format" value="Офлайн в Валенсии"><span>Офлайн</span></label>
-            <label class="format-option"><input type="radio" name="format" value="Нужна рекомендация"><span>Не знаю</span></label>
+            <label class="format-option"><input type="radio" name="format"
+                value="Офлайн в Валенсии"><span>Офлайн</span></label>
+            <label class="format-option"><input type="radio" name="format" value="Нужна рекомендация"><span>Не
+                знаю</span></label>
           </div>
         </fieldset>
 
@@ -753,6 +741,9 @@
     </section>
   </div>
 
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=20260719-i18n"></script>
+  <script
+    src="{{ url_for('static', filename='js/app.js') }}?v=20260719-i18n">
+  </script>
 </body>
+
 </html>
