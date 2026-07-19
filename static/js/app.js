@@ -7,6 +7,214 @@ if (telegram) {
   telegram.setBackgroundColor("#FFF8F4");
 }
 
+
+const translations = {
+  "Переключить язык": "Switch language",
+  "Язык для ваших реальных целей": "A language for your real-life goals",
+  "Подберём программу под ваш уровень, ритм и задачу — без давления и страха ошибиться.": "We will match a programme to your level, pace and goals — without pressure or fear of making mistakes.",
+  "Подобрать курс": "Find my course",
+  "Смотреть программы": "View programmes",
+  "«Хочу говорить без страха»": "“I want to speak without fear”",
+  "Онлайн по всему миру · Офлайн в Валенсии": "Online worldwide · In person in Valencia",
+  "Программы Lingo Space": "Lingo Space programmes",
+  "Выберите язык и цель": "Choose a language and goal",
+  "Небольшие группы, живая практика и программа, которую можно встроить в обычную жизнь.": "Small groups, real conversation and a programme that fits into everyday life.",
+  "Все": "All",
+  "Онлайн": "Online",
+  "Валенсия + онлайн": "Valencia + online",
+  "Разговорная практика": "Conversation practice",
+  "Для тех, кто понимает английский, но теряется, когда нужно говорить.": "For learners who understand English but feel stuck when it is time to speak.",
+  "2 раза в неделю": "Twice a week",
+  "До 6 человек": "Up to 6 learners",
+  "Подобрать этот курс": "Choose this course",
+  "Жизнь в Испании": "Life in Spain",
+  "Испанский для бытовых ситуаций, общения, документов и уверенной адаптации.": "Spanish for everyday situations, communication, paperwork and confident adaptation.",
+  "До 8 человек": "Up to 8 learners",
+  "Старт с нуля": "Start from zero",
+  "Мягкий и понятный старт для путешествий, культуры и первых живых диалогов.": "A clear and supportive start for travel, culture and your first real conversations.",
+  "Работа и карьера": "Work and career",
+  "Переговоры, встречи, презентации и переписка без шаблонных учебных диалогов.": "Negotiations, meetings, presentations and emails without artificial textbook dialogues.",
+  "1–2 раза в неделю": "Once or twice a week",
+  "Не уверены в выборе?": "Not sure which course to choose?",
+  "Подберём программу за 2 минуты": "Find your programme in two minutes",
+  "Начать подбор": "Start matching",
+  "Команда Lingo Space": "The Lingo Space team",
+  "Наши преподаватели": "Meet our teachers",
+  "Поддерживают, вдохновляют и помогают использовать язык в реальной жизни.": "They support, inspire and help you use the language in real life.",
+  "Business English, разговорная практика и подготовка к интервью.": "Business English, conversation practice and interview preparation.",
+  "10+ лет опыта": "10+ years of experience",
+  "Записаться": "Book a lesson",
+  "Испанский для жизни, адаптации в Испании и разговорной практики.": "Spanish for everyday life, adapting to Spain and conversation practice.",
+  "8+ лет опыта": "8+ years of experience",
+  "Итальянский с нуля, живой разговорный язык, культура и путешествия.": "Italian from zero, real conversation, culture and travel.",
+  "7+ лет опыта": "7+ years of experience",
+  "Как проходят занятия": "How lessons work",
+  "Живая практика": "Real practice",
+  "Практикуемся с первого занятия": "Practice from the very first lesson",
+  "Говорим, слушаем и применяем язык в реальных ситуациях. Ошибаться здесь нормально — важно пробовать.": "We speak, listen and use the language in real situations. Mistakes are welcome — what matters is trying.",
+  "Персональный подбор": "Personal course matching",
+  "Найдём ваш формат": "Find the format that suits you",
+  "Шесть коротких вопросов — и вы получите рекомендацию, с которой удобно начать.": "Answer six quick questions and get a practical recommendation for your first step.",
+  "Вы выбрали:": "You selected:",
+  "Выберите один вариант, чтобы продолжить.": "Choose one option to continue.",
+  "Назад": "Back",
+  "Далее": "Next",
+  "Ваш результат": "Your result",
+  "Лучший старт для вас:": "Your best starting point:",
+  "Записаться на пробный урок": "Book a free trial lesson",
+  "Пройти ещё раз": "Start again",
+  "Ближайшие старты": "Upcoming groups",
+  "Выберите удобную группу": "Choose a group that fits your schedule",
+  "Время указано по Валенсии. Для онлайн-занятий поможем сверить расписание с вашим часовым поясом.": "Times are shown in Valencia time. For online lessons, we will help you match the schedule to your time zone.",
+  "Офлайн": "In person",
+  "июля": "July",
+  "августа": "August",
+  "2 места": "2 places",
+  "4 места": "4 places",
+  "5 мест": "5 places",
+  "3 места": "3 places",
+  "Вт и Чт · 19:00": "Tue & Thu · 19:00",
+  "Пн и Ср · 18:30": "Mon & Wed · 18:30",
+  "Вт и Пт · 17:30": "Tue & Fri · 17:30",
+  "Пн и Чт · 20:00": "Mon & Thu · 20:00",
+  "Онлайн · 75 минут": "Online · 75 minutes",
+  "Офлайн · Валенсия": "In person · Valencia",
+  "Преподаватель Emma": "Teacher: Emma",
+  "Преподаватель Lucía": "Teacher: Lucía",
+  "Преподаватель Marco": "Teacher: Marco",
+  "Не нашли подходящее время?": "Could not find a suitable time?",
+  "Оставьте заявку — предложим другой вариант": "Send a request and we will suggest another option",
+  "Оставить заявку": "Send a request",
+  "Мы на связи": "Get in touch",
+  "Связаться с Lingo Space": "Contact Lingo Space",
+  "Задайте вопрос или оставьте заявку — ответим и поможем выбрать подходящий формат.": "Ask a question or send a request — we will reply and help you choose the right format.",
+  "Точный адрес офлайн-занятий сообщим после записи.": "We will share the exact in-person lesson address after booking.",
+  "Часы работы": "Opening hours",
+  "Пн–Пт: 9:00–21:00": "Mon–Fri: 9:00–21:00",
+  "Сб: 10:00–14:00": "Sat: 10:00–14:00",
+  "Открыть Валенсию на карте": "Open Valencia on the map",
+  "Часто задаваемые вопросы": "Frequently asked questions",
+  "Как проходит пробный урок?": "How does the trial lesson work?",
+  "Мы знакомимся, определяем текущий уровень, обсуждаем цель и предлагаем подходящий курс и формат.": "We meet, assess your current level, discuss your goal and suggest a suitable course and format.",
+  "Можно ли заниматься онлайн?": "Can I study online?",
+  "Да. Онлайн-группы и индивидуальные занятия доступны из любой страны.": "Yes. Online groups and one-to-one lessons are available from any country.",
+  "Как понять свой уровень?": "How can I determine my level?",
+  "Начните с подбора курса в Mini App. На пробном уроке преподаватель дополнительно уточнит уровень.": "Start with the course matcher in the Mini App. The teacher will confirm your level during the trial lesson.",
+  "Есть ли офлайн-занятия?": "Are in-person lessons available?",
+  "Да, в Валенсии. Точный адрес и инструкции администратор отправит после подтверждения записи.": "Yes, in Valencia. The administrator will send the exact address and instructions after confirming your booking.",
+  "Можно ли изменить группу?": "Can I change groups?",
+  "Да. Если время или темп не подходят, администратор предложит другую группу или формат.": "Yes. If the time or pace does not work, the administrator will suggest another group or format.",
+  "Основная навигация": "Main navigation",
+  "Главная": "Home",
+  "Курсы": "Courses",
+  "Подбор": "Match",
+  "Группы": "Groups",
+  "Связь": "Contact",
+  "Закрыть форму": "Close form",
+  "Бесплатный пробный урок": "Free trial lesson",
+  "Познакомимся и выберем лучший старт": "Let us meet and choose the best starting point",
+  "Оставьте контакт — администратор уточнит детали и предложит удобное время.": "Leave your contact details and the administrator will confirm the details and suggest a convenient time.",
+  "Вы выбрали": "You selected",
+  "Изменить": "Change",
+  "Ваше имя": "Your name",
+  "Например, Анна": "For example, Anna",
+  "Telegram, WhatsApp или email": "Telegram, WhatsApp or email",
+  "Язык": "Language",
+  "Выберите язык": "Choose a language",
+  "Курс": "Course",
+  "Выберите вариант": "Choose an option",
+  "Нужна рекомендация": "I need a recommendation",
+  "Удобный формат": "Preferred format",
+  "Не знаю": "Not sure",
+  "Преподаватель": "Teacher",
+  "Не важно": "No preference",
+  "Удобное время": "Preferred time",
+  "Выберите время": "Choose a time",
+  "Утром": "Morning",
+  "Днём": "Afternoon",
+  "Вечером": "Evening",
+  "Обсудить": "Discuss it",
+  "Согласен(на) на обработку данных для связи по заявке.": "I agree to the processing of my data for contact about this request.",
+  "Отправить заявку": "Send request",
+  "Отправляем…": "Sending…",
+  "Заявка отправлена": "Request sent",
+  "Спасибо! Мы скоро свяжемся с вами": "Thank you! We will contact you soon",
+  "Администратор уточнит ваш уровень и предложит удобное время пробного урока.": "The administrator will confirm your level and suggest a convenient time for the trial lesson.",
+  "Отправить ещё одну заявку": "Send another request"
+};
+
+const localeState = {
+  current: sessionStorage.getItem("lingo-language") === "en" ? "en" : "ru",
+};
+
+const textNodeRegistry = [];
+const attributeRegistry = [];
+
+function normalizeText(value) {
+  return value.replace(/\s+/g, " ").trim();
+}
+
+function registerStaticTranslations() {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  let node;
+
+  while ((node = walker.nextNode())) {
+    const ru = normalizeText(node.nodeValue || "");
+    if (ru && translations[ru]) {
+      textNodeRegistry.push({ node, ru, en: translations[ru] });
+    }
+  }
+
+  document.querySelectorAll("[placeholder], [aria-label]").forEach((element) => {
+    ["placeholder", "aria-label"].forEach((attribute) => {
+      const ru = element.getAttribute(attribute);
+      if (ru && translations[ru]) {
+        attributeRegistry.push({ element, attribute, ru, en: translations[ru] });
+      }
+    });
+  });
+}
+
+function localized(value) {
+  if (typeof value === "string") return value;
+  return value?.[localeState.current] || value?.ru || "";
+}
+
+function answerLabel(key, value) {
+  const question = matchingQuestions.find((item) => item.key === key);
+  const option = question?.options.find((item) => item.value === value);
+  return option ? localized(option) : value;
+}
+
+function updateStaticTranslations() {
+  textNodeRegistry.forEach(({ node, ru, en }) => {
+    const original = node.nodeValue || "";
+    const leading = original.match(/^\s*/)?.[0] || "";
+    const trailing = original.match(/\s*$/)?.[0] || "";
+    node.nodeValue = `${leading}${localeState.current === "en" ? en : ru}${trailing}`;
+  });
+
+  attributeRegistry.forEach(({ element, attribute, ru, en }) => {
+    element.setAttribute(attribute, localeState.current === "en" ? en : ru);
+  });
+
+  document.documentElement.lang = localeState.current;
+  const switcher = document.querySelector(".language-switch");
+  switcher.textContent = localeState.current === "ru" ? "EN" : "RU";
+  switcher.setAttribute("aria-pressed", localeState.current === "en" ? "true" : "false");
+}
+
+function setLanguage(language) {
+  localeState.current = language;
+  sessionStorage.setItem("lingo-language", language);
+  updateStaticTranslations();
+  renderMatchingStep();
+
+  if (!matchingResult.hidden && Object.keys(matchingState.answers).length) {
+    showMatchingResult(false);
+  }
+}
+
 function scrollToSection(targetId) {
   document.getElementById(targetId)?.scrollIntoView({
     behavior: "smooth",
@@ -45,60 +253,64 @@ document.querySelectorAll(".filter-button").forEach((button) => {
 const matchingQuestions = [
   {
     key: "language",
-    title: "Какой язык вы хотите изучать?",
-    hint: "Выберите один вариант.",
-    options: ["English", "Español", "Italiano"],
+    title: { ru: "Какой язык вы хотите изучать?", en: "Which language would you like to learn?" },
+    hint: { ru: "Выберите один вариант.", en: "Choose one option." },
+    options: [
+      { value: "English", ru: "English", en: "English" },
+      { value: "Español", ru: "Español", en: "Spanish" },
+      { value: "Italiano", ru: "Italiano", en: "Italian" },
+    ],
   },
   {
     key: "goal",
-    title: "Какая у вас главная цель?",
-    hint: "Так мы поймём, на чём сделать акцент.",
+    title: { ru: "Какая у вас главная цель?", en: "What is your main goal?" },
+    hint: { ru: "Так мы поймём, на чём сделать акцент.", en: "This helps us focus the course on what matters most." },
     options: [
-      "Свободнее говорить",
-      "Жить и адаптироваться",
-      "Работа и карьера",
-      "Путешествия и культура",
+      { value: "Свободнее говорить", ru: "Свободнее говорить", en: "Speak more confidently" },
+      { value: "Жить и адаптироваться", ru: "Жить и адаптироваться", en: "Live and adapt abroad" },
+      { value: "Работа и карьера", ru: "Работа и карьера", en: "Work and career" },
+      { value: "Путешествия и культура", ru: "Путешествия и культура", en: "Travel and culture" },
     ],
   },
   {
     key: "level",
-    title: "Как вы оцениваете свой уровень?",
-    hint: "Точная оценка не обязательна.",
+    title: { ru: "Как вы оцениваете свой уровень?", en: "How would you describe your level?" },
+    hint: { ru: "Точная оценка не обязательна.", en: "An exact assessment is not required." },
     options: [
-      "Начинаю с нуля",
-      "Знаю основы",
-      "Понимаю, но трудно говорить",
-      "Говорю уверенно",
+      { value: "Начинаю с нуля", ru: "Начинаю с нуля", en: "Starting from zero" },
+      { value: "Знаю основы", ru: "Знаю основы", en: "I know the basics" },
+      { value: "Понимаю, но трудно говорить", ru: "Понимаю, но трудно говорить", en: "I understand but struggle to speak" },
+      { value: "Говорю уверенно", ru: "Говорю уверенно", en: "I speak confidently" },
     ],
   },
   {
     key: "format",
-    title: "Как удобнее заниматься?",
-    hint: "Можно будет изменить формат после консультации.",
+    title: { ru: "Как удобнее заниматься?", en: "How would you prefer to study?" },
+    hint: { ru: "Можно будет изменить формат после консультации.", en: "You can change the format after the consultation." },
     options: [
-      "Онлайн",
-      "Офлайн в Валенсии",
-      "Подойдёт любой формат",
+      { value: "Онлайн", ru: "Онлайн", en: "Online" },
+      { value: "Офлайн в Валенсии", ru: "Офлайн в Валенсии", en: "In person in Valencia" },
+      { value: "Подойдёт любой формат", ru: "Подойдёт любой формат", en: "Either format works" },
     ],
   },
   {
     key: "pace",
-    title: "Какой ритм вам подходит?",
-    hint: "Выбирайте реалистичный вариант.",
+    title: { ru: "Какой ритм вам подходит?", en: "What pace works for you?" },
+    hint: { ru: "Выбирайте реалистичный вариант.", en: "Choose a realistic schedule." },
     options: [
-      "1 раз в неделю",
-      "2 раза в неделю",
-      "Интенсивно 3 раза в неделю",
+      { value: "1 раз в неделю", ru: "1 раз в неделю", en: "Once a week" },
+      { value: "2 раза в неделю", ru: "2 раза в неделю", en: "Twice a week" },
+      { value: "Интенсивно 3 раза в неделю", ru: "Интенсивно 3 раза в неделю", en: "Intensive: three times a week" },
     ],
   },
   {
     key: "group",
-    title: "В какой атмосфере вам комфортнее?",
-    hint: "Все группы остаются небольшими.",
+    title: { ru: "В какой атмосфере вам комфортнее?", en: "Which learning setting feels best?" },
+    hint: { ru: "Все группы остаются небольшими.", en: "All groups remain small." },
     options: [
-      "Мини-группа",
-      "Индивидуально",
-      "Не знаю — нужна рекомендация",
+      { value: "Мини-группа", ru: "Мини-группа", en: "Small group" },
+      { value: "Индивидуально", ru: "Индивидуально", en: "One-to-one" },
+      { value: "Не знаю — нужна рекомендация", ru: "Не знаю — нужна рекомендация", en: "Not sure — I need advice" },
     ],
   },
 ];
@@ -129,30 +341,32 @@ function renderMatchingStep() {
   );
 
   stepLabel.textContent =
-    `Шаг ${matchingState.currentStep + 1} из ${matchingQuestions.length}`;
+    localeState.current === "en"
+      ? `Step ${matchingState.currentStep + 1} of ${matchingQuestions.length}`
+      : `Шаг ${matchingState.currentStep + 1} из ${matchingQuestions.length}`;
   progressValue.textContent = `${progress}%`;
   progressBar.style.width = `${progress}%`;
   backButton.disabled = matchingState.currentStep === 0;
   nextButton.textContent =
     matchingState.currentStep === matchingQuestions.length - 1
-      ? "Показать результат"
-      : "Далее";
+      ? (localeState.current === "en" ? "Show result" : "Показать результат")
+      : (localeState.current === "en" ? "Next" : "Далее");
   errorMessage.hidden = true;
 
   questionArea.innerHTML = `
     <div class="matching-question">
-      <h3>${question.title}</h3>
-      <p>${question.hint}</p>
+      <h3>${localized(question.title)}</h3>
+      <p>${localized(question.hint)}</p>
       <div class="matching-options">
         ${question.options
           .map(
             (option) => `
               <button
-                class="matching-option${savedAnswer === option ? " selected" : ""}"
+                class="matching-option${savedAnswer === option.value ? " selected" : ""}"
                 type="button"
-                data-answer="${option}"
+                data-answer="${option.value}"
               >
-                ${option}
+                ${localized(option)}
               </button>
             `
           )
@@ -182,16 +396,18 @@ function getRecommendation() {
   if (language === "Español") {
     return {
       title: "Español para la vida",
-      description:
-        "Практичный испанский для повседневного общения, адаптации и уверенной жизни в Испании.",
+      description: localeState.current === "en"
+        ? "Practical Spanish for everyday communication, adaptation and confident life in Spain."
+        : "Практичный испанский для повседневного общения, адаптации и уверенной жизни в Испании.",
     };
   }
 
   if (language === "Italiano") {
     return {
       title: "Italiano da zero",
-      description:
-        "Мягкая программа с понятной базой и большим количеством живых разговорных ситуаций.",
+      description: localeState.current === "en"
+        ? "A supportive programme with a clear foundation and plenty of real conversation practice."
+        : "Мягкая программа с понятной базой и большим количеством живых разговорных ситуаций.",
     };
   }
 
@@ -201,19 +417,21 @@ function getRecommendation() {
   ) {
     return {
       title: "Business English",
-      description:
-        "Английский для встреч, переписки, презентаций и уверенной профессиональной коммуникации.",
+      description: localeState.current === "en"
+        ? "English for meetings, emails, presentations and confident professional communication."
+        : "Английский для встреч, переписки, презентаций и уверенной профессиональной коммуникации.",
     };
   }
 
   return {
     title: "English Conversation",
-    description:
-      "Разговорная программа, которая помогает перестать переводить в голове и начать говорить свободнее.",
+    description: localeState.current === "en"
+      ? "A conversation programme that helps you stop translating in your head and speak more freely."
+      : "Разговорная программа, которая помогает перестать переводить в голове и начать говорить свободнее.",
   };
 }
 
-function showMatchingResult() {
+function showMatchingResult(shouldScroll = true) {
   const recommendation = getRecommendation();
 
   document.getElementById("result-title").textContent = recommendation.title;
@@ -222,27 +440,29 @@ function showMatchingResult() {
 
   document.getElementById("result-summary").innerHTML = `
     <div class="result-summary-row">
-      <span>Язык</span>
-      <strong>${matchingState.answers.language}</strong>
+      <span>${localeState.current === "en" ? "Language" : "Язык"}</span>
+      <strong>${answerLabel("language", matchingState.answers.language)}</strong>
     </div>
     <div class="result-summary-row">
-      <span>Цель</span>
-      <strong>${matchingState.answers.goal}</strong>
+      <span>${localeState.current === "en" ? "Goal" : "Цель"}</span>
+      <strong>${answerLabel("goal", matchingState.answers.goal)}</strong>
     </div>
     <div class="result-summary-row">
-      <span>Формат</span>
-      <strong>${matchingState.answers.format}</strong>
+      <span>${localeState.current === "en" ? "Format" : "Формат"}</span>
+      <strong>${answerLabel("format", matchingState.answers.format)}</strong>
     </div>
     <div class="result-summary-row">
-      <span>Ритм</span>
-      <strong>${matchingState.answers.pace}</strong>
+      <span>${localeState.current === "en" ? "Pace" : "Ритм"}</span>
+      <strong>${answerLabel("pace", matchingState.answers.pace)}</strong>
     </div>
   `;
 
   matchingCard.hidden = true;
   matchingResult.hidden = false;
   telegram?.HapticFeedback?.notificationOccurred("success");
-  matchingResult.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (shouldScroll) {
+    matchingResult.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 nextButton.addEventListener("click", () => {
@@ -458,19 +678,19 @@ trialForm.addEventListener("submit",async(event)=>{
   if(invalid){
     invalid.classList.add("invalid");
     invalid.focus();
-    trialError.textContent="Заполните все обязательные поля.";
+    trialError.textContent=localeState.current === "en" ? "Complete all required fields." : "Заполните все обязательные поля.";
     trialError.hidden=false;
     return;
   }
 
   if(!format){
-    trialError.textContent="Выберите удобный формат занятий.";
+    trialError.textContent=localeState.current === "en" ? "Choose your preferred lesson format." : "Выберите удобный формат занятий.";
     trialError.hidden=false;
     return;
   }
 
   if(!document.getElementById("trial-consent").checked){
-    trialError.textContent="Подтвердите согласие на обработку данных.";
+    trialError.textContent=localeState.current === "en" ? "Please confirm consent to data processing." : "Подтвердите согласие на обработку данных.";
     trialError.hidden=false;
     return;
   }
@@ -505,7 +725,7 @@ trialForm.addEventListener("submit",async(event)=>{
     const result=await response.json();
 
     if(!response.ok||!result.ok){
-      throw new Error(result.error||"Не удалось отправить заявку.");
+      throw new Error(result.error||(localeState.current === "en" ? "Could not send the request." : "Не удалось отправить заявку."));
     }
 
     trialForm.hidden=true;
@@ -513,7 +733,7 @@ trialForm.addEventListener("submit",async(event)=>{
     trialDialog.scrollTop=0;
     telegram?.HapticFeedback?.notificationOccurred("success");
   }catch(error){
-    trialError.textContent=error.message||"Ошибка отправки.";
+    trialError.textContent=error.message||(localeState.current === "en" ? "Sending failed." : "Ошибка отправки.");
     trialError.hidden=false;
     telegram?.HapticFeedback?.notificationOccurred("error");
   }finally{
@@ -532,6 +752,15 @@ document.getElementById("trial-new-request").addEventListener("click",()=>{
   trialDialog.scrollTop=0;
   document.getElementById("trial-name").focus();
 });
+
+registerStaticTranslations();
+
+document.querySelector(".language-switch").addEventListener("click", () => {
+  setLanguage(localeState.current === "ru" ? "en" : "ru");
+  telegram?.HapticFeedback?.selectionChanged();
+});
+
+updateStaticTranslations();
 
 document.querySelectorAll(".bottom-nav a").forEach((link) => {
   link.addEventListener("click", () => {
