@@ -704,8 +704,38 @@ const trialSelection = document.getElementById("trial-selection");
 const trialSelectionText = document.getElementById("trial-selection-text");
 let lastFocusedElement = null;
 
+function teacherForLanguage(language) {
+  const teachers = {
+    English: "Emma",
+    Español: "Lucía",
+    Italiano: "Marco",
+  };
+
+  return teachers[language] || "Не важно";
+}
+
+function setTrialFormat(format) {
+  const formatMap = {
+    "Онлайн": "Онлайн",
+    "Офлайн в Валенсии": "Офлайн в Валенсии",
+    "Подойдёт любой формат": "Нужна рекомендация",
+  };
+
+  const formValue = formatMap[format] || format;
+
+  trialForm
+    .querySelectorAll('input[name="format"]')
+    .forEach((input) => {
+      input.checked = input.value === formValue;
+    });
+}
+
 function setTrialSelection(language = "", course = "") {
-  if (language) trialLanguage.value = language;
+  if (language) {
+    trialLanguage.value = language;
+    trialTeacher.value = teacherForLanguage(language);
+  }
+
   if (course) trialCourse.value = course;
 
   if (language || course) {
@@ -723,6 +753,10 @@ function openTrialModal(options = {}) {
 
   if (options.teacher) {
     trialTeacher.value = options.teacher;
+  }
+
+  if (options.format) {
+    setTrialFormat(options.format);
   }
 
   trialForm.hidden = false;
@@ -783,9 +817,14 @@ document.querySelectorAll("[data-scroll-to='trial']").forEach((button) => {
 
     openTrialModal({
       language: resultTitle ? resultLanguage : "",
-      course: resultTitle ? resultTitle : ""
+      course: resultTitle ? resultTitle : "",
+      format: resultTitle ? (matchingState.answers.format || "") : ""
     });
   });
+});
+
+trialLanguage.addEventListener("change", () => {
+  trialTeacher.value = teacherForLanguage(trialLanguage.value);
 });
 
 document.getElementById("trial-selection-clear").addEventListener("click", () => {
