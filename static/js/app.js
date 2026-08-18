@@ -152,6 +152,23 @@ const translations = {
   "Спасибо! Мы скоро свяжемся с вами": "Thank you! We will contact you soon",
   "Администратор уточнит ваш уровень и предложит удобное время пробного урока.": "The administrator will confirm your level and suggest a convenient time for the trial lesson.",
   "Отправить ещё одну заявку": "Send another request"
+  ,"@username или email": "@username or email"
+  ,"Выберите уровень": "Choose your level"
+  ,"Начинаю с нуля": "Starting from zero"
+  ,"Выберите цель": "Choose your goal"
+  ,"Переезд и жизнь за границей": "Moving and life abroad"
+  ,"Путешествия": "Travel"
+  ,"Учёба": "Study"
+  ,"Другая цель": "Another goal"
+  ,"Результат: увереннее говорить в повседневных ситуациях, поддерживать разговор и быстрее формулировать мысли.": "Outcome: speak more confidently in everyday situations, keep conversations going and express ideas faster."
+  ,"Результат: увереннее решать бытовые вопросы и общаться в Испании без постоянной помощи переводчика.": "Outcome: handle everyday situations in Spain more confidently without relying on a translator."
+  ,"Результат: освоить базу и начать использовать итальянский в простых реальных ситуациях.": "Outcome: build a solid foundation and start using Italian in simple real-life situations."
+  ,"Результат: увереннее проводить встречи, писать рабочие письма и презентовать идеи на английском.": "Outcome: handle meetings, work emails and presentations in English with more confidence."
+  ,"сентября": "September"
+  ,"Фильтр курсов по языку": "Filter courses by language"
+  ,"Фильтр расписания": "Filter schedule"
+  ,"Шаг 1 из 6": "Step 1 of 6"
+  ,"Валенсия": "Valencia"
   ,"Сначала выберите язык": "Choose a language first"
   ,"Сначала выберите курс": "Choose a course first"
   ,"Подберём после консультации": "We will suggest an option after consultation"
@@ -240,10 +257,53 @@ function updateStaticTranslations() {
   switcher.setAttribute("aria-pressed", localeState.current === "en" ? "true" : "false");
 }
 
+function updateDynamicLocalizedUI() {
+  const isEnglish = localeState.current === "en";
+
+  // Explicitly localized blocks added during the client-polish pass.
+  document.querySelectorAll("[data-ru][data-en]").forEach((element) => {
+    element.textContent = isEnglish ? element.dataset.en : element.dataset.ru;
+  });
+
+  // Trial form labels/options can be changed dynamically, so keep them synchronized explicitly.
+  const levelLabel = document.getElementById("trial-level-label");
+  const goalLabel = document.getElementById("trial-goal-label");
+  const teacherHint = document.getElementById("trial-teacher-hint");
+  const contactInput = document.getElementById("trial-contact");
+
+  if (levelLabel) levelLabel.textContent = isEnglish ? "Current level" : "Текущий уровень";
+  if (goalLabel) goalLabel.textContent = isEnglish ? "Main goal" : "Главная цель";
+  if (teacherHint) {
+    teacherHint.textContent = isEnglish
+      ? "The teacher is assigned automatically based on the selected language and course."
+      : "Преподаватель подбирается автоматически по выбранному языку и курсу.";
+  }
+  if (contactInput) contactInput.placeholder = isEnglish ? "@username or email" : "@username или email";
+
+  if (trialLevel) {
+    const labels = isEnglish
+      ? ["Choose your level", "Starting from zero", "A1", "A2", "B1", "B2", "C1+", "Not sure"]
+      : ["Выберите уровень", "Начинаю с нуля", "A1", "A2", "B1", "B2", "C1+", "Не знаю"];
+    Array.from(trialLevel.options).forEach((option, index) => {
+      if (labels[index]) option.textContent = labels[index];
+    });
+  }
+
+  if (trialGoal) {
+    const labels = isEnglish
+      ? ["Choose your goal", "Conversation practice", "Work and career", "Moving and life abroad", "Travel", "Study", "Another goal"]
+      : ["Выберите цель", "Разговорная практика", "Работа и карьера", "Переезд и жизнь за границей", "Путешествия", "Учёба", "Другая цель"];
+    Array.from(trialGoal.options).forEach((option, index) => {
+      if (labels[index]) option.textContent = labels[index];
+    });
+  }
+}
+
 function setLanguage(language) {
   localeState.current = language;
   sessionStorage.setItem("lingo-language", language);
   updateStaticTranslations();
+  updateDynamicLocalizedUI();
 
   if (typeof syncTrialForm === "function" && trialCourse) {
     syncTrialForm(trialCourse.value);
@@ -1161,6 +1221,7 @@ document.querySelector(".language-switch").addEventListener("click", () => {
 });
 
 updateStaticTranslations();
+updateDynamicLocalizedUI();
 
 document.querySelectorAll(".bottom-nav a").forEach((link) => {
   link.addEventListener("click", () => {
