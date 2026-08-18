@@ -9,7 +9,6 @@ load_dotenv()
 
 logging.basicConfig(format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",level=logging.INFO)
 logger=logging.getLogger(__name__)
-
 BOT_TOKEN=os.getenv("TELEGRAM_BOT_TOKEN","").strip()
 WEBAPP_URL=os.getenv("WEBAPP_URL","").strip()
 WEBHOOK_SECRET=os.getenv("WEBHOOK_SECRET","").strip()
@@ -17,14 +16,12 @@ ADMIN_CHAT_ID=os.getenv("ADMIN_CHAT_ID","").strip()
 TELEGRAM_API_URL=f"https://api.telegram.org/bot{BOT_TOKEN}" if BOT_TOKEN else ""
 
 app=Flask(__name__)
-
 def build_webapp_markup():
     if not WEBAPP_URL:return None
     return {"inline_keyboard":[
         [{"text":"Открыть Mini App","web_app":{"url":WEBAPP_URL}}],
         [{"text":"Открыть в браузере","url":WEBAPP_URL}]
     ]}
-
 def send_telegram_message(chat_id,text,reply_markup=None):
     if not TELEGRAM_API_URL:raise RuntimeError("Bot token is missing")
     payload={"chat_id":chat_id,"text":text}
@@ -35,7 +32,6 @@ def send_telegram_message(chat_id,text,reply_markup=None):
 @app.get("/")
 def index():
     return render_template("index.html")
-
 @app.get("/health")
 def health():
     return jsonify({
@@ -45,7 +41,6 @@ def health():
         "webhook_secret_configured":bool(WEBHOOK_SECRET),
         "admin_chat_configured":bool(ADMIN_CHAT_ID)
     })
-
 @app.post("/webhook")
 def telegram_webhook():
     if not BOT_TOKEN:return jsonify({"ok":False,"error":"Bot is not configured"}),503
@@ -74,36 +69,112 @@ def telegram_webhook():
         logger.exception("Failed to send Telegram message")
         return jsonify({"ok":False,"error":"Telegram API error"}),502
     return jsonify({"ok":True})
+COURSE_RULES = {
+    "English Conversation": {
+        "language": "English",
+        "teacher": "Emma",
+        "format": "Онлайн",
+        "times": {"Вт и Чт · 19:00"},
+    },
+    "Business English": {
+        "language": "English",
+        "teacher": "Emma",
+        "format": "Онлайн",
+        "times": {"Пн и Чт · 20:00"},
+    },
+    "Español para la vida": {
+        "language": "Español",
+        "teacher": "Lucía",
+        "format": "Офлайн в Валенсии",
+        "times": {"Пн и Ср · 18:30"},
+    },
+    "Italiano da zero": {
+        "language": "Italiano",
+        "teacher": "Marco",
+        "format": "Онлайн",
+        "times": {"Вт и Пт · 17:30"},
+    },
+}
+
+TEACHERS_BY_LANGUAGE = {
+    "English": "Emma",
+    "Español": "Lucía",
+    "Italiano": "Marco",
+}
+
 
 @app.post("/api/trial")
 def create_trial_request():
-    data=request.get_json(silent=True) or {}
-    fields={key:str(data.get(key,"")).strip() for key in ("name","contact","language","course","format","preferred_time")}
+    data = request.get_json(silent=True) or {}
+    fields = {
+        key: str(data.get(key, "")).strip()
+        for key in (
+            "name",
+            "contact",
+            "language",
+            "course",
+            "level",
+            "goal",
+            "format",
+            "preferred_time",
+        )
+    }
+
     if any(not value for value in fields.values()):
-        return jsonify({"ok":False,"error":"Заполните все обязательные поля."}),400
+        return jsonify({"ok": False, "error": "Заполните все обязательные поля."}), 400
+
     if not ADMIN_CHAT_ID:
-        return jsonify({"ok":False,"error":"Канал заявок пока не настроен."}),503
-    teacher=str(data.get("teacher","Не важно")).strip() or "Не важно"
-    username=str(data.get("telegram_username","")).strip()
-    user_id=data.get("telegram_user_id")
-    tg_context=f"@{username}" if username else (f"ID {user_id}" if user_id else "не указан")
-    text=(
-      "🎓 Новая заявка Lingo Space\n\n"
-      f"Имя: {fields['name']}\n"
-      f"Контакт: {fields['contact']}\n"
-      f"Язык: {fields['language']}\n"
-      f"Курс: {fields['course']}\n"
-      f"Формат: {fields['format']}\n"
-      f"Удобное время: {fields['preferred_time']}\n"
-      f"Преподаватель: {teacher}\n\n"
-      f"Источник: {str(data.get('source','Web')).strip()}\n"
-      f"Telegram: {tg_context}"
+        return jsonify({"ok": False, "error": "Канал заявок пока не настроен."}), 503
+
+    teacher = str(data.get("teacher", "")).strip()
+
+    if fields["course"] == "Нужна рекомендация":
+        expected_teacher = TEACHERS_BY_LANGUAGE.get(fields["language"], "")
+        if not expected_teacher or teacher != expected_teacher:
+            return jsonify({"ok": False, "error": "Некорректно выбран преподаватель."}), 400
+        if fields["format"] != "Нужна рекомендация" or fields["preferred_time"] != "Обсудить с администратором":
+            return jsonify({"ok": False, "error": "Для подбора курса формат и время уточняет администратор."}), 400
+    else:
+        rule = COURSE_RULES.get(fields["course"])
+        if not rule:
+            return jsonify({"ok": False, "error": "Выбран неизвестный курс."}), 400
+
+        if fields["language"] != rule["language"]:
+            return jsonify({"ok": False, "error": "Курс не соответствует выбранному языку."}), 400
+        if teacher != rule["teacher"]:
+            return jsonify({"ok": False, "error": "Преподаватель не соответствует выбранному курсу."}), 400
+        if fields["format"] != rule["format"]:
+            return jsonify({"ok": False, "error": "Формат не соответствует выбранной группе."}), 400
+        if fields["preferred_time"] not in rule["times"]:
+            return jsonify({"ok": False, "error": "Выбранное время недоступно для этого курса."}), 400
+
+    username = str(data.get("telegram_username", "")).strip()
+    user_id = data.get("telegram_user_id")
+    tg_context = f"@{username}" if username else (f"ID {user_id}" if user_id else "не указан")
+
+    text = (
+        "🎓 Новая заявка Lingo Space\n\n"
+        f"Имя: {fields['name']}\n"
+        f"Контакт: {fields['contact']}\n"
+        f"Язык: {fields['language']}\n"
+        f"Курс: {fields['course']}\n"
+        f"Уровень: {fields['level']}\n"
+        f"Цель: {fields['goal']}\n"
+        f"Формат: {fields['format']}\n"
+        f"Группа / время: {fields['preferred_time']}\n"
+        f"Преподаватель: {teacher}\n\n"
+        f"Источник: {str(data.get('source', 'Web')).strip()}\n"
+        f"Telegram: {tg_context}"
     )
-    try:send_telegram_message(ADMIN_CHAT_ID,text)
-    except (httpx.HTTPError,RuntimeError):
+
+    try:
+        send_telegram_message(ADMIN_CHAT_ID, text)
+    except (httpx.HTTPError, RuntimeError):
         logger.exception("Failed to send trial request")
-        return jsonify({"ok":False,"error":"Не удалось отправить заявку. Попробуйте позже."}),502
-    return jsonify({"ok":True,"message":"Заявка отправлена."})
+        return jsonify({"ok": False, "error": "Не удалось отправить заявку. Попробуйте позже."}), 502
+
+    return jsonify({"ok": True, "message": "Заявка отправлена."})
+
 
 if __name__=="__main__":
     app.run(host="0.0.0.0",port=int(os.getenv("PORT","5000")),debug=True)

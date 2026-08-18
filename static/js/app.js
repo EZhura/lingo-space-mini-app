@@ -141,6 +141,13 @@ const translations = {
   "Спасибо! Мы скоро свяжемся с вами": "Thank you! We will contact you soon",
   "Администратор уточнит ваш уровень и предложит удобное время пробного урока.": "The administrator will confirm your level and suggest a convenient time for the trial lesson.",
   "Отправить ещё одну заявку": "Send another request"
+  ,"Сначала выберите язык": "Choose a language first"
+  ,"Сначала выберите курс": "Choose a course first"
+  ,"Подберём после консультации": "We will suggest an option after consultation"
+  ,"Преподаватель подбирается автоматически": "Teacher is assigned automatically"
+  ,"Пн и Ср · 18:30": "Mon & Wed · 18:30"
+  ,"Вт и Пт · 17:30": "Tue & Fri · 17:30"
+  ,"Пн и Чт · 20:00": "Mon & Thu · 20:00"
 };
 
 const localeState = {
@@ -700,9 +707,44 @@ const trialError = document.getElementById("trial-form-error");
 const trialLanguage = document.getElementById("trial-language");
 const trialCourse = document.getElementById("trial-course");
 const trialTeacher = document.getElementById("trial-teacher");
+const trialTeacherDisplay = document.getElementById("trial-teacher-display");
+const trialTime = document.getElementById("trial-time");
+const trialLevel = document.getElementById("trial-level");
+const trialGoal = document.getElementById("trial-goal");
 const trialSelection = document.getElementById("trial-selection");
 const trialSelectionText = document.getElementById("trial-selection-text");
 let lastFocusedElement = null;
+
+const trialRules = {
+  "English Conversation": {
+    language: "English",
+    teacher: "Emma",
+    formats: ["Онлайн"],
+    times: ["Вт и Чт · 19:00"],
+    levels: ["A2", "B1", "B2", "Не знаю"],
+  },
+  "Business English": {
+    language: "English",
+    teacher: "Emma",
+    formats: ["Онлайн"],
+    times: ["Пн и Чт · 20:00"],
+    levels: ["B1", "B2", "C1+", "Не знаю"],
+  },
+  "Español para la vida": {
+    language: "Español",
+    teacher: "Lucía",
+    formats: ["Офлайн в Валенсии"],
+    times: ["Пн и Ср · 18:30"],
+    levels: ["Начинаю с нуля", "A1", "A2", "B1", "Не знаю"],
+  },
+  "Italiano da zero": {
+    language: "Italiano",
+    teacher: "Marco",
+    formats: ["Онлайн"],
+    times: ["Вт и Пт · 17:30"],
+    levels: ["Начинаю с нуля", "A1", "A2", "Не знаю"],
+  },
+};
 
 function teacherForLanguage(language) {
   const teachers = {
@@ -710,8 +752,113 @@ function teacherForLanguage(language) {
     Español: "Lucía",
     Italiano: "Marco",
   };
+  return teachers[language] || "";
+}
 
-  return teachers[language] || "Не важно";
+function teacherLabel(teacher) {
+  const labels = {
+    Emma: "Emma — English",
+    "Lucía": "Lucía — Español",
+    Marco: "Marco — Italiano",
+  };
+  return labels[teacher] || (localeState.current === "en" ? "Choose a language" : "Выберите язык");
+}
+
+function levelMatchesCourse(course) {
+  const rule = trialRules[course];
+  if (!rule || !trialLevel || !trialLevel.value) return true;
+  return rule.levels.includes(trialLevel.value);
+}
+
+function updateTeacher() {
+  const courseRule = trialRules[trialCourse.value];
+  const teacher = courseRule?.teacher || teacherForLanguage(trialLanguage.value);
+  trialTeacher.value = teacher;
+  if (trialTeacherDisplay) trialTeacherDisplay.value = teacherLabel(teacher);
+}
+
+function updateCourseOptions(preferredCourse = "") {
+  const language = trialLanguage.value;
+  const currentCourse = preferredCourse || trialCourse.value;
+
+  Array.from(trialCourse.options).forEach((option, index) => {
+    if (index === 0) {
+      option.hidden = false;
+      option.disabled = false;
+      option.textContent = language
+        ? (localeState.current === "en" ? "Choose a course" : "Выберите вариант")
+        : (localeState.current === "en" ? "Choose a language first" : "Сначала выберите язык");
+      return;
+    }
+
+    const courseLanguage = option.dataset.courseLanguage;
+    const visible = courseLanguage === "all" || courseLanguage === language;
+    option.hidden = !visible;
+    option.disabled = !visible;
+  });
+
+  if (currentCourse) {
+    const desired = Array.from(trialCourse.options).find(
+      (option) => option.value === currentCourse && !option.disabled
+    );
+    trialCourse.value = desired ? currentCourse : "";
+  } else if (trialCourse.value && trialCourse.selectedOptions[0]?.disabled) {
+    trialCourse.value = "";
+  }
+}
+
+function updateFormatAvailability() {
+  const rule = trialRules[trialCourse.value];
+  const formatInputs = Array.from(trialForm.querySelectorAll('input[name="format"]'));
+
+  if (!rule) {
+    formatInputs.forEach((input) => {
+      const isRecommendation = input.value === "Нужна рекомендация";
+      input.disabled = !isRecommendation;
+      input.checked = isRecommendation;
+    });
+    return;
+  }
+
+  formatInputs.forEach((input) => {
+    const available = rule.formats.includes(input.value);
+    input.disabled = !available;
+    input.checked = available && rule.formats.length === 1;
+  });
+}
+
+function updateTimeOptions() {
+  const rule = trialRules[trialCourse.value];
+  trialTime.innerHTML = "";
+
+  if (!rule) {
+    const option = document.createElement("option");
+    option.value = "Обсудить с администратором";
+    option.textContent = localeState.current === "en"
+      ? "We will suggest an option after consultation"
+      : "Подберём после консультации";
+    trialTime.appendChild(option);
+    return;
+  }
+
+  rule.times.forEach((time) => {
+    const option = document.createElement("option");
+    option.value = time;
+    option.textContent = localeState.current === "en" ? (translations[time] || time) : time;
+    trialTime.appendChild(option);
+  });
+}
+
+function syncTrialForm(preferredCourse = "") {
+  updateCourseOptions(preferredCourse);
+
+  if (trialCourse.value && !levelMatchesCourse(trialCourse.value)) {
+    trialCourse.value = "Нужна рекомендация";
+  }
+
+  updateTeacher();
+  updateFormatAvailability();
+  updateTimeOptions();
 }
 
 function setTrialFormat(format) {
@@ -722,24 +869,21 @@ function setTrialFormat(format) {
   };
 
   const formValue = formatMap[format] || format;
-
-  trialForm
-    .querySelectorAll('input[name="format"]')
-    .forEach((input) => {
-      input.checked = input.value === formValue;
-    });
+  trialForm.querySelectorAll('input[name="format"]').forEach((input) => {
+    if (!input.disabled) input.checked = input.value === formValue;
+  });
 }
 
 function setTrialSelection(language = "", course = "") {
-  if (language) {
-    trialLanguage.value = language;
-    trialTeacher.value = teacherForLanguage(language);
+  if (language) trialLanguage.value = language;
+  syncTrialForm(course);
+  if (course && trialCourse.value !== course && levelMatchesCourse(course)) {
+    trialCourse.value = course;
+    syncTrialForm(course);
   }
 
-  if (course) trialCourse.value = course;
-
   if (language || course) {
-    trialSelectionText.textContent = [course, language].filter(Boolean).join(" · ");
+    trialSelectionText.textContent = [trialCourse.value || course, language].filter(Boolean).join(" · ");
     trialSelection.hidden = false;
   }
 }
@@ -747,12 +891,24 @@ function setTrialSelection(language = "", course = "") {
 function openTrialModal(options = {}) {
   lastFocusedElement = document.activeElement;
 
+  const levelMap = {
+    "Начинаю с нуля": "Начинаю с нуля",
+    "Знаю основы": "A2",
+    "Понимаю, но трудно говорить": "B1",
+    "Говорю уверенно": "B2",
+  };
+  const goalMap = {
+    "Свободнее говорить": "Разговорная практика",
+    "Жить и адаптироваться": "Переезд и жизнь за границей",
+    "Работа и карьера": "Работа и карьера",
+    "Путешествия и культура": "Путешествия",
+  };
+
+  if (options.level && trialLevel) trialLevel.value = levelMap[options.level] || options.level;
+  if (options.goal && trialGoal) trialGoal.value = goalMap[options.goal] || options.goal;
+
   if (options.language || options.course) {
     setTrialSelection(options.language || "", options.course || "");
-  }
-
-  if (options.teacher) {
-    trialTeacher.value = options.teacher;
   }
 
   if (options.format) {
@@ -818,20 +974,38 @@ document.querySelectorAll("[data-scroll-to='trial']").forEach((button) => {
     openTrialModal({
       language: resultTitle ? resultLanguage : "",
       course: resultTitle ? resultTitle : "",
-      format: resultTitle ? (matchingState.answers.format || "") : ""
+      format: resultTitle ? (matchingState.answers.format || "") : "",
+      level: resultTitle ? (matchingState.answers.level || "") : "",
+      goal: resultTitle ? (matchingState.answers.goal || "") : ""
     });
   });
 });
 
 trialLanguage.addEventListener("change", () => {
-  trialTeacher.value = teacherForLanguage(trialLanguage.value);
+  trialCourse.value = "";
+  syncTrialForm();
 });
+
+trialCourse.addEventListener("change", () => {
+  syncTrialForm(trialCourse.value);
+});
+
+if (trialLevel) {
+  trialLevel.addEventListener("change", () => {
+    if (trialCourse.value && trialCourse.value !== "Нужна рекомендация" && !levelMatchesCourse(trialCourse.value)) {
+      trialCourse.value = "Нужна рекомендация";
+    }
+    syncTrialForm(trialCourse.value);
+  });
+}
 
 document.getElementById("trial-selection-clear").addEventListener("click", () => {
   trialLanguage.value = "";
   trialCourse.value = "";
-  trialTeacher.value = "Не важно";
+  if (trialLevel) trialLevel.value = "";
+  if (trialGoal) trialGoal.value = "";
   trialSelection.hidden = true;
+  syncTrialForm();
   trialLanguage.focus();
 });
 
@@ -843,9 +1017,11 @@ trialForm.addEventListener("submit", async (event) => {
   const required = [
     document.getElementById("trial-name"),
     document.getElementById("trial-contact"),
+    trialLevel,
+    trialGoal,
     trialLanguage,
     trialCourse,
-    document.getElementById("trial-time")
+    trialTime
   ];
 
   const invalid = required.find((element) => !element.value.trim());
@@ -891,8 +1067,10 @@ trialForm.addEventListener("submit", async (event) => {
         contact: document.getElementById("trial-contact").value.trim(),
         language: trialLanguage.value,
         course: trialCourse.value,
+        level: trialLevel.value,
+        goal: trialGoal.value,
         format: format.value,
-        preferred_time: document.getElementById("trial-time").value,
+        preferred_time: trialTime.value,
         teacher: trialTeacher.value,
         source: telegram ? "Telegram Mini App" : "Web browser",
         telegram_user_id: telegramUser ?.id || null,
