@@ -229,6 +229,88 @@
       }
     }
 
+  
+    /* Mobile readability + teacher carousel polish */
+    @media (max-width: 640px) {
+      .teacher-list {
+        display: flex !important;
+        gap: 14px !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory;
+        scroll-padding-left: 0;
+        padding-right: 30px !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      .teacher-list::-webkit-scrollbar {
+        display: none;
+      }
+
+      .teacher-card {
+        flex: 0 0 88% !important;
+        width: 88% !important;
+        min-width: 88% !important;
+        max-width: 88% !important;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+
+      .teacher-card img {
+        width: 100%;
+        object-fit: cover;
+      }
+
+      .teacher-content > p:not(.teacher-language),
+      .teacher-fit {
+        font-size: 15px !important;
+        line-height: 1.55 !important;
+      }
+
+      .teacher-footer {
+        font-size: 13.5px !important;
+      }
+
+      .course-description,
+      .course-outcome,
+      .school-intro,
+      .school-feature span,
+      .section-heading > p,
+      .contact-item p,
+      .faq-panel p {
+        font-size: 15px !important;
+        line-height: 1.58 !important;
+      }
+
+      .course-meta span,
+      .schedule-details,
+      .schedule-help,
+      .availability {
+        font-size: 13.5px !important;
+        line-height: 1.5 !important;
+      }
+
+      .schedule-kicker,
+      .course-kicker,
+      .teacher-language {
+        font-size: 13px !important;
+      }
+
+      .schedule-action,
+      .course-action,
+      .teacher-action {
+        font-size: 14px !important;
+      }
+
+      .school-feature strong {
+        font-size: 15px !important;
+      }
+
+      .school-copy h2 {
+        line-height: 1.04;
+      }
+    }
+
   </style>
 
 </head>
