@@ -92,6 +92,143 @@
       border-top: 1px solid rgba(38, 31, 62, 0.08);
     }
 
+    .school-section {
+      padding-top: 26px;
+      padding-bottom: 38px;
+    }
+
+    .school-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 34px;
+      align-items: center;
+      padding: 28px;
+      border: 1px solid rgba(38, 31, 62, 0.08);
+      border-radius: 34px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .school-copy h2 {
+      margin: 8px 0 14px;
+      max-width: 680px;
+    }
+
+    .school-intro {
+      margin: 0;
+      max-width: 620px;
+      color: rgba(38, 31, 62, 0.72);
+      line-height: 1.7;
+    }
+
+    .school-features {
+      display: grid;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .school-feature {
+      display: grid;
+      gap: 4px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(38, 31, 62, 0.08);
+    }
+
+    .school-feature strong {
+      color: #261f3e;
+      font-size: 0.98rem;
+    }
+
+    .school-feature span {
+      color: rgba(38, 31, 62, 0.66);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .school-gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 250px 250px;
+      gap: 12px;
+    }
+
+    .school-photo {
+      margin: 0;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #f3eee9;
+    }
+
+    .school-photo-main {
+      grid-row: 1 / span 2;
+    }
+
+    .school-photo img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .school-photo-main img {
+      object-position: center;
+    }
+
+    @media (max-width: 820px) {
+      .school-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 22px;
+        border-radius: 28px;
+      }
+
+      .school-gallery {
+        grid-template-rows: 250px 170px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .school-section {
+        padding-top: 16px;
+        padding-bottom: 26px;
+      }
+
+      .school-layout {
+        padding: 18px;
+        border-radius: 24px;
+      }
+
+      .school-gallery {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 230px 130px;
+        gap: 9px;
+      }
+
+      .school-photo {
+        border-radius: 18px;
+      }
+    }
+
+  
+    /* Final composition polish */
+    .school-photo-main img {
+      object-position: 52% center;
+    }
+
+    /* Keep the quiz visually connected to its left-aligned heading instead of floating separately in the center. */
+    .matching-section .matching-card,
+    .matching-section .matching-result {
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    @media (max-width: 820px) {
+      .matching-section .matching-card,
+      .matching-section .matching-result {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
   </style>
 
 </head>
@@ -400,15 +537,63 @@
       </div>
     </section>
 
-    <section class="atmosphere-section" aria-label="Как проходят занятия">
-      <img
-        src="{{ url_for('static', filename='images/class_atmosphere.jpg') }}"
-        alt="Небольшая группа занимается языком в Lingo Space">
-      <div class="atmosphere-overlay"></div>
-      <div class="atmosphere-content">
-        <span class="atmosphere-label">Живая практика</span>
-        <h2>Практикуемся с первого занятия</h2>
-        <p>Говорим, слушаем и применяем язык в реальных ситуациях. Ошибаться здесь нормально — важно пробовать.</p>
+
+    <section class="section school-section" id="school">
+      <div class="school-layout">
+        <div class="school-copy">
+          <span class="eyebrow" data-ru="Наша школа" data-en="Our school">Наша школа</span>
+          <h2 data-ru="Пространство, где языком начинают пользоваться"
+              data-en="A space where language becomes part of real life">
+            Пространство, где языком начинают пользоваться
+          </h2>
+          <p class="school-intro"
+             data-ru="Lingo Space — международная языковая школа в Валенсии. Мы создаём спокойную и дружелюбную среду, где можно говорить, ошибаться, задавать вопросы и постепенно чувствовать себя увереннее. Для нас важно, чтобы обучение было связано с реальной жизнью: от первого диалога до уверенного общения в работе, путешествиях и повседневных ситуациях."
+             data-en="Lingo Space is an international language school in Valencia. We create a calm, welcoming environment where you can speak, make mistakes, ask questions and gradually become more confident. We want learning to feel connected to real life — from the first conversation to confident communication at work, while travelling and in everyday situations.">
+            Lingo Space — международная языковая школа в Валенсии. Мы создаём спокойную и дружелюбную среду, где можно говорить, ошибаться, задавать вопросы и постепенно чувствовать себя увереннее.
+          </p>
+
+          <div class="school-features">
+            <div class="school-feature">
+              <strong data-ru="Небольшие группы" data-en="Small groups">Небольшие группы</strong>
+              <span data-ru="До 6–8 человек и больше внимания каждому."
+                    data-en="Up to 6–8 learners, with more attention for everyone.">
+                До 6–8 человек и больше внимания каждому.
+              </span>
+            </div>
+            <div class="school-feature">
+              <strong data-ru="Живая практика" data-en="Real-life practice">Живая практика</strong>
+              <span data-ru="Разговорные занятия, реальные ситуации и язык вне учебника."
+                    data-en="Conversation, real situations and language beyond the textbook.">
+                Разговорные занятия, реальные ситуации и язык вне учебника.
+              </span>
+            </div>
+            <div class="school-feature">
+              <strong data-ru="Валенсия + онлайн" data-en="Valencia + online">Валенсия + онлайн</strong>
+              <span data-ru="Можно заниматься в школе или подключаться из другой страны."
+                    data-en="Study at the school in Valencia or join from another country.">
+                Можно заниматься в школе или подключаться из другой страны.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="school-gallery" aria-label="Lingo Space">
+          <figure class="school-photo school-photo-main">
+            <img
+              src="{{ url_for('static', filename='images/school_about_main.jpg') }}"
+              alt="Небольшая группа студентов общается за столом">
+          </figure>
+          <figure class="school-photo">
+            <img
+              src="{{ url_for('static', filename='images/school_about_classroom.jpg') }}"
+              alt="Светлый современный учебный класс">
+          </figure>
+          <figure class="school-photo">
+            <img
+              src="{{ url_for('static', filename='images/school_about_group.jpg') }}"
+              alt="Студенты Lingo Space работают вместе">
+          </figure>
+        </div>
       </div>
     </section>
 
@@ -628,6 +813,19 @@
       </div>
     </section>
 
+
+
+    <section class="atmosphere-section" aria-label="Как проходят занятия">
+      <img
+        src="{{ url_for('static', filename='images/class_atmosphere.jpg') }}"
+        alt="Небольшая группа занимается языком в Lingo Space">
+      <div class="atmosphere-overlay"></div>
+      <div class="atmosphere-content">
+        <span class="atmosphere-label">Живая практика</span>
+        <h2>Практикуемся с первого занятия</h2>
+        <p>Говорим, слушаем и применяем язык в реальных ситуациях. Ошибаться здесь нормально — важно пробовать.</p>
+      </div>
+    </section>
 
     <section class="section contacts-section" id="contacts">
       <div class="section-heading">
