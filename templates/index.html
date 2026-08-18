@@ -16,6 +16,51 @@
   <link rel="stylesheet"
     href="{{ url_for('static', filename='css/style.css') }}">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    .language-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border: 1px solid rgba(38, 31, 62, 0.14);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .language-option {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      padding: 4px 5px;
+      font: inherit;
+      font-weight: 600;
+      color: rgba(38, 31, 62, 0.48);
+      cursor: pointer;
+    }
+
+    .language-option.active {
+      color: #261f3e;
+    }
+
+    .language-divider {
+      color: rgba(38, 31, 62, 0.24);
+      user-select: none;
+    }
+
+    @media (max-width: 640px) {
+      .language-toggle {
+        gap: 4px;
+        padding: 5px 8px;
+        border-radius: 14px;
+      }
+
+      .language-option {
+        padding: 3px 4px;
+      }
+    }
+  </style>
+
 </head>
 
 <body>
@@ -28,9 +73,14 @@
         </span>
       </a>
 
-      <button class="language-switch" type="button" aria-label="Переключить язык" aria-pressed="false">
-        EN
-      </button>
+      <div class="language-toggle" role="group" aria-label="Переключить язык">
+        <button class="language-option active" type="button" data-language="ru" aria-pressed="true">RU</button>
+        <span class="language-divider" aria-hidden="true">/</span>
+        <button class="language-option" type="button" data-language="en" aria-pressed="false">EN</button>
+        <button class="language-switch" type="button" aria-label="Переключить язык" aria-pressed="false" hidden>
+          EN
+        </button>
+      </div>
     </header>
 
     <section class="hero" id="home">
@@ -744,6 +794,39 @@
   <script
     src="{{ url_for('static', filename='js/app.js') }}?v=20260719-i18n">
   </script>
+
+  <script>
+    (function () {
+      const hiddenSwitch = document.querySelector(".language-switch");
+      const options = document.querySelectorAll(".language-option");
+
+      function syncLanguageToggle() {
+        const current = document.documentElement.lang === "en" ? "en" : "ru";
+
+        options.forEach((button) => {
+          const isActive = button.dataset.language === current;
+          button.classList.toggle("active", isActive);
+          button.setAttribute("aria-pressed", isActive ? "true" : "false");
+        });
+      }
+
+      options.forEach((button) => {
+        button.addEventListener("click", () => {
+          const requested = button.dataset.language;
+          const current = document.documentElement.lang === "en" ? "en" : "ru";
+
+          if (requested !== current && hiddenSwitch) {
+            hiddenSwitch.click();
+          }
+
+          syncLanguageToggle();
+        });
+      });
+
+      syncLanguageToggle();
+    })();
+  </script>
+
 </body>
 
 </html>
