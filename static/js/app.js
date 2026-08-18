@@ -125,6 +125,17 @@ const translations = {
   "Выберите вариант": "Choose an option",
   "Нужна рекомендация": "I need a recommendation",
   "Удобный формат": "Preferred format",
+  "Текущий уровень": "Current level",
+  "Главная цель": "Main goal",
+  "Преподаватель": "Teacher",
+  "Преподаватель подбирается автоматически по выбранному языку и курсу.": "The teacher is assigned automatically based on the selected language and course.",
+  "Выберите язык": "Choose a language",
+  "Разговорный и профессиональный английский, работа с речью, лексикой и уверенностью в общении.": "Conversational and professional English with a focus on speaking, vocabulary and confidence in communication.",
+  "Работает со взрослыми уровня A2–C1: разговорный английский, работа, путешествия и подготовка к реальным ситуациям.": "Works with adults from A2 to C1: conversation, work, travel and practical real-life English.",
+  "Разговорный испанский, системная грамматика и практический язык для жизни, работы и общения.": "Conversational Spanish, structured grammar and practical language for everyday life, work and communication.",
+  "Работает со взрослыми уровня A1–B2 и помогает развивать язык для повседневной жизни, работы, учёбы и адаптации.": "Works with adults from A1 to B2 and develops Spanish for everyday life, work, study and adaptation.",
+  "Разговорный итальянский, грамматика и практическое использование языка от первых шагов до уверенного общения.": "Conversational Italian, grammar and practical language use from the first steps to confident communication.",
+  "Работает со взрослыми уровня A0–B2: помогает выстроить базу, развить разговорную речь и двигаться дальше без пробелов.": "Works with adults from A0 to B2: builds a clear foundation, develops speaking skills and helps learners progress without gaps.",
   "Не знаю": "Not sure",
   "Преподаватель": "Teacher",
   "Не важно": "No preference",
@@ -233,6 +244,11 @@ function setLanguage(language) {
   localeState.current = language;
   sessionStorage.setItem("lingo-language", language);
   updateStaticTranslations();
+
+  if (typeof syncTrialForm === "function" && trialCourse) {
+    syncTrialForm(trialCourse.value);
+  }
+
   renderMatchingStep();
 
   if (!matchingResult.hidden && Object.keys(matchingState.answers).length) {
@@ -816,14 +832,23 @@ function updateFormatAvailability() {
       const isRecommendation = input.value === "Нужна рекомендация";
       input.disabled = !isRecommendation;
       input.checked = isRecommendation;
+      input.closest(".format-option")?.classList.toggle("is-unavailable", !isRecommendation);
     });
     return;
   }
 
+  let selectedAvailableFormat = false;
+
   formatInputs.forEach((input) => {
     const available = rule.formats.includes(input.value);
     input.disabled = !available;
-    input.checked = available && rule.formats.length === 1;
+    input.checked = false;
+    input.closest(".format-option")?.classList.toggle("is-unavailable", !available);
+
+    if (available && !selectedAvailableFormat) {
+      input.checked = true;
+      selectedAvailableFormat = true;
+    }
   });
 }
 
@@ -869,9 +894,23 @@ function setTrialFormat(format) {
   };
 
   const formValue = formatMap[format] || format;
-  trialForm.querySelectorAll('input[name="format"]').forEach((input) => {
-    if (!input.disabled) input.checked = input.value === formValue;
-  });
+  const inputs = Array.from(trialForm.querySelectorAll('input[name="format"]'));
+  const requestedInput = inputs.find((input) => input.value === formValue && !input.disabled);
+
+  // If the user's preferred format is actually available, select it.
+  if (requestedInput) {
+    inputs.forEach((input) => {
+      if (!input.disabled) input.checked = input === requestedInput;
+    });
+    return;
+  }
+
+  // Otherwise keep the course's automatically selected real format.
+  const alreadySelected = inputs.find((input) => input.checked && !input.disabled);
+  if (!alreadySelected) {
+    const firstAvailable = inputs.find((input) => !input.disabled);
+    if (firstAvailable) firstAvailable.checked = true;
+  }
 }
 
 function setTrialSelection(language = "", course = "") {
@@ -914,6 +953,11 @@ function openTrialModal(options = {}) {
   if (options.format) {
     setTrialFormat(options.format);
   }
+
+  // Final safety sync: course rules always win over a generic matcher preference.
+  updateTeacher();
+  updateFormatAvailability();
+  updateTimeOptions();
 
   trialForm.hidden = false;
   trialSuccess.hidden = true;

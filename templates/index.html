@@ -82,6 +82,11 @@
       line-height: 1.4;
     }
 
+    .format-option.is-unavailable {
+      opacity: 0.42;
+      cursor: not-allowed;
+    }
+
     .teacher-fit {
       padding-top: 10px;
       border-top: 1px solid rgba(38, 31, 62, 0.08);
@@ -868,67 +873,10 @@
 
 
 
-  <script>
-    (function () {
-      function currentLanguage() {
-        return document.documentElement.lang === "en" ? "en" : "ru";
-      }
-
-      function updateAddedTranslations() {
-        const lang = currentLanguage();
-
-        document.querySelectorAll("[data-ru][data-en]").forEach((element) => {
-          element.textContent = element.dataset[lang];
-        });
-
-        const levelLabel = document.getElementById("trial-level-label");
-        const goalLabel = document.getElementById("trial-goal-label");
-        const teacherHint = document.getElementById("trial-teacher-hint");
-
-        if (levelLabel) levelLabel.textContent = lang === "en" ? "Current level" : "Текущий уровень";
-        if (goalLabel) goalLabel.textContent = lang === "en" ? "Main goal" : "Главная цель";
-        if (teacherHint) {
-          teacherHint.textContent = lang === "en"
-            ? "The teacher is assigned automatically based on the selected language and course."
-            : "Преподаватель подбирается автоматически по выбранному языку и курсу.";
-        }
-
-        const level = document.getElementById("trial-level");
-        const goal = document.getElementById("trial-goal");
-
-        if (level) {
-          const texts = lang === "en"
-            ? ["Choose your level", "Starting from zero", "A1", "A2", "B1", "B2", "C1+", "Not sure"]
-            : ["Выберите уровень", "Начинаю с нуля", "A1", "A2", "B1", "B2", "C1+", "Не знаю"];
-          Array.from(level.options).forEach((option, index) => {
-            if (texts[index]) option.textContent = texts[index];
-          });
-        }
-
-        if (goal) {
-          const texts = lang === "en"
-            ? ["Choose your goal", "Conversation practice", "Work and career", "Moving and life abroad", "Travel", "Study", "Another goal"]
-            : ["Выберите цель", "Разговорная практика", "Работа и карьера", "Переезд и жизнь за границей", "Путешествия", "Учёба", "Другая цель"];
-          Array.from(goal.options).forEach((option, index) => {
-            if (texts[index]) option.textContent = texts[index];
-          });
-        }
-      }
-
-      document.addEventListener("click", function (event) {
-        if (event.target.closest(".language-option")) {
-          setTimeout(updateAddedTranslations, 0);
-        }
-      });
-
-      window.updateAddedTranslations = updateAddedTranslations;
-      updateAddedTranslations();
-    })();
-  </script>
 
 
   <script
-    src="{{ url_for('static', filename='js/app.js') }}?v=20260719-i18n">
+    src="{{ url_for('static', filename='js/app.js') }}?v=20260818-sync-v3">
   </script>
 
   <script>
